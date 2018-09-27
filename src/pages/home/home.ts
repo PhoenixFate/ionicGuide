@@ -97,7 +97,7 @@ export class HomePage {
     infoWindow.addEventListener('open', function () {
       $('#more').bind("click", function () {
         that.navCtrl.push(ScenicSpotPage, { "id": point.id });
-      });
+      });0
       $('#more').bind("touchstart", function () {
         that.navCtrl.push(ScenicSpotPage, { "id": point.id });
       });
