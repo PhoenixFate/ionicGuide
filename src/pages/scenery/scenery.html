@@ -1,0 +1,30 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>
+      看景
+    </ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content>
+  <ion-slides pager class="my-slides" autoplay='2000'  loop *ngIf="slides.length > 1">
+    <ion-slide *ngFor="let slide of slides ">
+      <img [src]="slide.mainImage" class="slide-image"/>
+    </ion-slide>
+  </ion-slides>
+
+  <ion-list>
+    <ion-item *ngFor='let item of sceneries;let i=index'>
+      <ion-thumbnail item-start>
+        <img [src]="item.src">
+      </ion-thumbnail>
+      <h2>{{item.title}}</h2>
+      <!-- <p>{{item.content}}</p> -->
+      <button ion-button clear item-end (click)="toDetails(i,item.id)">详情</button>
+    </ion-item>
+  </ion-list>
+
+  <ion-infinite-scroll (ionInfinite)='doInfinite($event)'>
+    <ion-infinite-scroll-content loadingSpinner='bubbles' loadingText='正在加载'></ion-infinite-scroll-content>
+  </ion-infinite-scroll>
+</ion-content>

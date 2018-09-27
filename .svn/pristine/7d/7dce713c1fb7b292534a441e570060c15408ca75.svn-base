@@ -1,0 +1,20 @@
+page-mine {
+    .head {
+        height: 40%;
+        width: 100%;
+        background-color: burlywood;
+        display: flex;
+        align-items: center;
+    }
+    .myAvatar {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        margin-left: 8%;
+    }
+    .myNickname {
+        font-size: 30px;
+        margin-left: 20px;
+        line-height: 100%;
+    }
+}

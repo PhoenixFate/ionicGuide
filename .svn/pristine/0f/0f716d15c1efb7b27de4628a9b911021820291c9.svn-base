@@ -1,0 +1,7 @@
+{
+  "name": "guide",
+  "integrations": {
+    "cordova": {}
+  },
+  "type": "ionic-angular"
+}
