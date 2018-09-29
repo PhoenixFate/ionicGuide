@@ -1,11 +1,12 @@
 page-feedback {
-    .my-content-title{
-        padding: 18px;
+    .feedback-title{
+        margin-left: 18px;
     }
-    .my-content {
-        margin: 18px;
-        height: 300px;
-        width: 90%;
-        border: 1px solid black;
+
+    .feedback-content {
+        display: block;
+        margin: 0 auto 50px;
+        border: 1px solid blue;
+        font-size: 20px;
     }
 }

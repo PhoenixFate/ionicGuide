@@ -19,6 +19,9 @@ import { NicknamePage } from '../pages/nickname/nickname';
 import { PhoneNumberPage } from '../pages/phone-number/phone-number'
 import { FeedbackPage } from '../pages/feedback/feedback'
 
+import { BarcodeScanner } from '@ionic-native/barcode-scanner';
+import { ThemeableBrowser, ThemeableBrowserOptions, ThemeableBrowserObject } from '@ionic-native/themeable-browser';
+
 
 import { HttpModule, JsonpModule } from '@angular/http'
 import { StatusBar } from '@ionic-native/status-bar';
@@ -48,6 +51,7 @@ import { SplashScreen } from '@ionic-native/splash-screen';
     HttpModule,
     JsonpModule,
     IonicModule.forRoot(MyApp,{
+      tabsHideOnSubPages:'true',
       backButtonText:'返回'
     }),
     IonicStorageModule.forRoot()
@@ -73,6 +77,8 @@ import { SplashScreen } from '@ionic-native/splash-screen';
   providers: [
     StatusBar,
     SplashScreen,
+    BarcodeScanner,
+    ThemeableBrowser,
     {provide: ErrorHandler, useClass: IonicErrorHandler}
   ]
 })

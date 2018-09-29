@@ -86,8 +86,8 @@ export class HomePage {
     var sContent =
       '<ul style="margin:0 0 5px 0;z-index:100" >'
       + '<li style="line-height: 26px;font-size: 16px; text-align:center;margin-top:12px">'
-      + '<span style="width: 50px;display: inline-block;">名称：</span>' + point.name + '</li>'
-      + '<li id="more"  style="line-height: 26px;font-size: 16px; text-align:center;margin-top:12px"><span style="width: 50px;display: inline-block;">查看：</span>详情</li>'
+      + '<span style="width: 80px;display: inline-block;">名称：</span>' + point.name + '</li>'
+      + '<li id="more"  style="line-height: 26px;font-size: 16px; text-align:center;margin-top:12px"><span style="width: 80px;display: inline-block;">查看：</span>详情</li>'
       // + '<li style="line-height: 26px;font-size: 16px; text-align:center;margin-top:12px">'
       // + '<button style="height:30px;width=260px;margin:0 auto">点击进行语音播报</button></li>'
       + '</ul>';

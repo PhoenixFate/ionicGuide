@@ -36,6 +36,9 @@ export class ScenicSpotPage {
   }
 
   doSpeak(){
+    if(this.audio!=null){
+      this.audio.pause();
+    }
     let url='http://tsn.baidu.com/text2audio?lan=zh&ctp=1&cuid=abcdxxx&tok=24.c9db7b3df791be77a72b9fd8250486f3.2592000.1540103485.282335-11796257&tex='+this.descRead;
     this.audio.src=url;
     this.audio.play();

@@ -7,7 +7,7 @@
 <ion-header>
 
   <ion-navbar>
-    <ion-title>feedback</ion-title>
+    <ion-title>反馈</ion-title>
   </ion-navbar>
 
 </ion-header>
@@ -19,10 +19,9 @@
       <ion-label>标题：</ion-label>
       <ion-input type='text'></ion-input>
     </ion-item>
-
-      <ion-label class='my-content-title'>内容：</ion-label>
-      <ion-textarea class='my-content'></ion-textarea>
     
   </ion-list>
+  <h5 class='feedback-title'>内容：</h5>
+  <textarea class='feedback-content' rows="14" cols="30"></textarea>
   <button ion-button full (click)='makeSure()'>确定</button>
 </ion-content>

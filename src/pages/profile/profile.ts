@@ -78,4 +78,8 @@ export class ProfilePage {
     actionSheet.present();
   }
 
+  exit(){
+    this.navCtrl.pop();
+  }
+
 }
