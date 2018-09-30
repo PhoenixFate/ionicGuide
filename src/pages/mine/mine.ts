@@ -18,7 +18,10 @@ import { FeedbackPage } from '../feedback/feedback';
   templateUrl: 'mine.html',
 })
 export class MinePage {
-
+  public profile = [
+    {name:'头像',content:'assets/imgs/advance-card-jp.jpg'},
+    {name:'用户名',content:'woody'}
+  ];
   constructor(public navCtrl: NavController, public navParams: NavParams) {
   }
 

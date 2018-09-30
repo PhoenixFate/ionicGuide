@@ -14,8 +14,11 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
   templateUrl: 'nickname.html',
 })
 export class NicknamePage {
-  public nickname='woody';
+  public nickname;
+  public callback;
   constructor(public navCtrl: NavController, public navParams: NavParams) {
+    this.callback = this.navParams.get("callback");
+    this.nickname=this.navParams.get("nickname");
   }
 
   ionViewDidLoad() {
@@ -23,6 +26,8 @@ export class NicknamePage {
   }
 
   makeSure(){
-    this.navCtrl.pop();
+    this.callback({type:1,value:this.nickname}).then(() => {
+      this.navCtrl.pop();
+    });
   }
 }

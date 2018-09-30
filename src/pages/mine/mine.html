@@ -16,8 +16,8 @@
 <ion-content>
   <div class='head' (click)='toDetails(1)'>
   
-      <img src="assets/imgs/advance-card-jp.jpg" alt="" class='myAvatar'>
-      <span class='myNickname'>woody</span>
+      <img [src]="profile[0].content" alt="" class='myAvatar'>
+      <span class='myNickname'>{{profile[1].content}}</span>
       <ion-icon name='arrow-forward' class='head-icon'></ion-icon>
       <!-- <ion-icon name='arrow-forward' icon-end></ion-icon> -->
   </div>

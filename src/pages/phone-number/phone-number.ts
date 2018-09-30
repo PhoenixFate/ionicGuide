@@ -14,15 +14,21 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
   templateUrl: 'phone-number.html',
 })
 export class PhoneNumberPage {
-  public phoneNumber='18751801512';
+  public phoneNumber;
+  public callback;
   constructor(public navCtrl: NavController, public navParams: NavParams) {
+    this.callback = this.navParams.get("callback");
+    this.phoneNumber = this.navParams.get("phoneNumber");
   }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad PhoneNumberPage');
   }
 
-  makeSure(){
-    this.navCtrl.pop();
+  makeSure() {
+    this.callback({type:3,value:this.phoneNumber}).then(() => {
+      this.navCtrl.pop();
+    });
+    
   }
 }

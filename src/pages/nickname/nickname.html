@@ -17,7 +17,7 @@
     <ion-list>
         <ion-item>
           <ion-label>昵称：</ion-label>
-          <ion-input type='text' [value]='nickname'></ion-input>
+          <ion-input type='text' [value]='nickname' [(ngModel)]="nickname"></ion-input>
         </ion-item>
       </ion-list>
       <button ion-button full (click)='makeSure()'>确定</button>
