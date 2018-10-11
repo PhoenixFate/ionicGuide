@@ -1,3 +1,12 @@
 page-scan{
-
+    .scan-image {
+        position:absolute;
+        left: 50%;
+        top:50%;
+        margin-left: -110px;
+        margin-top: -100px;
+        width: 220px;
+        height: 220px;
+        // margin: 30% auto;
+    }
 }

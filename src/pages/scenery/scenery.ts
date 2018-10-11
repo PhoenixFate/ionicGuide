@@ -8,57 +8,6 @@ import { Http, Jsonp} from '@angular/http';
   templateUrl: 'scenery.html'
 })
 export class SceneryPage {
-  // public slides=[
-  //   {
-  //     image:'assets/imgs/1.jpg'
-  //   },
-  //   {
-  //     image:'assets/imgs/2.jpg'
-  //   },
-  //   {
-  //     image:'assets/imgs/3.jpg'
-  //   },
-  //   {
-  //     image:'assets/imgs/4.jpg'
-  //   }
-  // ];
-  // public sceneries=[
-  //   {
-  //     src:'assets/imgs/thumbnail-totoro.png',
-  //     title:'My Neighbor Totoro',
-  //     content:'Hayao Miyazaki • 1988'
-  //   },
-  //   {
-  //     src:'assets/imgs/thumbnail-rotla.png',
-  //     title:'Raiders of the Lost Ark',
-  //     content:'Steven Spielberg • 1981'
-  //   },
-  //   {
-  //     src:'assets/imgs/thumbnail-ghostbusters.png',
-  //     title:'Ghostbusters',
-  //     content:'Ivan Reitman • 1984'
-  //   },
-  //   {
-  //     src:'assets/imgs/thumbnail-batman.png',
-  //     title:'Batman',
-  //     content:'Tim Burton • 1988'
-  //   },
-  //   {
-  //     src:'assets/imgs/thumbnail-bttf.png',
-  //     title:'Back to the Future',
-  //     content:'Robert Zemeckis • 1985'
-  //   },
-  //   {
-  //     src:'assets/imgs/thumbnail-esb.png',
-  //     title:'The Empire Strikes Back',
-  //     content:'Irvin Kershner • 1980'
-  //   },
-  //   {
-  //     src:'assets/imgs/thumbnail-terminator.png',
-  //     title:'The Terminator',
-  //     content:'James Cameron • 1984'
-  //   }
-  // ]
   public slides=[];
   public sceneries=[];
   public page=1;
@@ -74,7 +23,6 @@ export class SceneryPage {
         temp[i].mainImage=arr[0];
       }
       this.slides=temp;
-      console.log(this.slides);
     },err=>{
 
     });
@@ -94,7 +42,6 @@ export class SceneryPage {
         let arr=[];
         for(let i=0;i<temp.length;i++){
           let arr=temp[i].mainImage.split('|');
-          console.log(arr);
           arr.shift();
           arr[0]='https://njrzzk.com/'+arr[0];
           temp[i].mainImage=arr[0];

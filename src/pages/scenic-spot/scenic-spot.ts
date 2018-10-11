@@ -44,4 +44,10 @@ export class ScenicSpotPage {
     this.audio.play();
 
   }
+
+  doPause(){
+    this.audio.pause();
+  }
+
+  
 }

@@ -6,4 +6,12 @@
 
 <ion-content>
   <div id="allmap" #map></div>
+  <div  class="alarm" (click)='changeAlarm()'>
+    <img [src]="alarmImg" class="alarm-image"/>
+  </div>
+
+  <div  class="position" >
+    <img src="assets/imgs/position.png" class="position-image"/>
+  </div>
+  <audio id='speak-audio'></audio>
 </ion-content>
