@@ -1,8 +1,8 @@
-<ion-header>
+<!-- <ion-header>
   <ion-navbar>
     <ion-title>首页</ion-title>
   </ion-navbar>
-</ion-header>
+</ion-header> -->
 
 <ion-content>
   <div id="allmap" #map></div>
@@ -10,8 +10,11 @@
     <img [src]="alarmImg" class="alarm-image"/>
   </div>
 
-  <div  class="position" >
+  <div  class="position"  (click)='showLocation()'>
     <img src="assets/imgs/position.png" class="position-image"/>
+  </div>
+  <div  class="scenery"  (click)='toScenery()'>
+    <img src="assets/imgs/scenery.png" class="scenery-image"/>
   </div>
   <audio id='speak-audio'></audio>
 </ion-content>

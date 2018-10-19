@@ -17,8 +17,8 @@ export class MyApp {
     
     //通过key，判断曾经是否进入过引导页
     this.storage.get('firstIn').then((result)=>{
-      console.log('firstIn is',result);
-      result=false;
+      //console.log('firstIn is',result);
+      //result=false;
       if(result){
         this.rootPage=TabsPage;
       }else {

@@ -1,12 +1,65 @@
 page-scenery {
-    .my-slides {
-        height: 36%;
+    #my-slides {
+        height: 38%;
         width: 100%;
         margin-bottom: 30px;
+        margin-top: 0px
     }
-    .slide-image{
-        width: 100%;
-        height: 100%;
+    #slide-image{
+        width: auto;
+        height: auto;
         margin: 0;
+    }
+
+    .swiper-container {
+        height: auto;
+    }
+
+    .news-left {
+        position: relative;
+        height: 120px;
+        width: 54%;
+        float: left;
+    }
+    .news-right {
+        height: 120px;
+        width: 46%;
+        float: left;
+    }
+    .news-hot{
+        margin-left: 14px;
+    }
+    .news-left img {
+        position:absolute;
+        height: 100%;
+        width: 92%;
+        right: 8%;
+    }
+    .news-title {
+        width: 100%;
+        margin-top: 16px;
+        height: 80px;
+        white-space: normal;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        font-size: 18px;
+        line-height: 20px;
+    }
+    .news-time {
+        position: relative;
+        height: 24px;
+        font-size: 10px;
+    }
+    .news-time-detail {
+        position: absolute;
+        bottom: 0;
+        margin-left: 24px;
+    }
+
+    .news-time img {
+        position: absolute;
+        bottom: 0;
+        width: 16px;
+        height: 16px;
     }
 }
