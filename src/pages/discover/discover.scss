@@ -1,0 +1,56 @@
+page-discover {
+    * {
+        margin: 0;
+        padding: 0;
+    }
+    .toolbar-md{
+        padding: 4px;
+        min-height: 40px;
+        line-height: 40px;
+        text-align: center;
+    }
+    .toolbar-background-md{
+        background-color: #555;
+    }
+    .toolbar-title-md{
+        color: #fff;
+    }
+    .my-discover-content{
+        height: 100%;
+        width: 100%;
+        background-color:#f8f8f8;
+    }
+    .my-discover-item {
+        height: 50;
+        width: 100%;
+        border-top: 1px solid #aaa;
+        border-bottom: 1px solid #aaa;
+        margin-top: 30px;
+        line-height: 50px;
+        background-color: #fff;
+        font-size: 16px;
+    }
+
+    .my-discover-item img {
+        vertical-align: middle;
+    }
+
+    .my-discover-item span {
+        margin-left: 20px;
+    }
+
+    .my-discover-logo{
+        height: 30px;
+        width: 30px;
+        margin-left: 20px;
+    }
+
+    .my-discover-forward {
+        height: 30px;
+        width: 26px;
+        float: right;
+        margin-right: 10px;
+        margin-top: 10px;
+    }
+
+}

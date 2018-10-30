@@ -16,11 +16,14 @@
 <ion-content padding>
     <ion-list>
         <ion-item *ngFor="let item of items; let i=index" (click)='changeProfile(i)'>
-          {{item.name}}
+          {{item}}
           <ion-avatar item-end *ngIf='i==0'>
-            <img [src]='item.content' alt="">
+            <img [src]='user.image?("https://njrzzk.com"+user.image):"assets/imgs/avatar-default.png"' alt="">
           </ion-avatar>
-          <span item-end *ngIf='i!=0'>{{item.content}}</span>
+          <span item-end *ngIf='i==1'>{{user.username}}</span>
+          <span item-end *ngIf='i==2'>{{user.nickname}}</span>
+          <span item-end *ngIf='i==3'>{{(user.sex=='' || user.sex==null || user.sex=='1')?'男':'女'}}</span>
+          <span item-end *ngIf='i==4'>{{user.phone}}</span>
           <ion-icon name='arrow-forward' item-end></ion-icon>
         </ion-item>
       </ion-list>

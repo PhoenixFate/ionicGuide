@@ -23,8 +23,10 @@ export class SceneryDatailsPage {
     let url="https://njrzzk.com/app/a/app/tblInformation/getDetail?id="+id;
     this.http.get(url).subscribe(data=>{
       let temp=JSON.parse(data['_body']).rows;
-      this.desc=temp[0].description;
       console.log(temp);
+      console.log("------------------")
+      this.desc=temp[0].descriptionForApp;
+      console.log(this.desc);
     },err=>{
 
     });

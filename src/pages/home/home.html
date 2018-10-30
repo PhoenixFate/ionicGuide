@@ -1,20 +1,41 @@
-<!-- <ion-header>
+<ion-header>
   <ion-navbar>
     <ion-title>首页</ion-title>
   </ion-navbar>
-</ion-header> -->
+</ion-header>
 
 <ion-content>
   <div id="allmap" #map></div>
   <div  class="alarm" (click)='changeAlarm()'>
     <img [src]="alarmImg" class="alarm-image"/>
   </div>
-
+  <div  class="route" (click)='showNavigation()'>
+    <img src="assets/imgs/路线.png" class="route-image"/>
+  </div>
   <div  class="position"  (click)='showLocation()'>
     <img src="assets/imgs/position.png" class="position-image"/>
   </div>
   <div  class="scenery"  (click)='toScenery()'>
     <img src="assets/imgs/scenery.png" class="scenery-image"/>
+  </div>
+  <div id='navigation-result'>
+    <div class='navigation-result-title'>
+      <div class='navigation-result-close' (click)='closeNavigation()'>
+          x
+      </div>
+    </div>
+    <div class='navigation-result-body'>
+      <div class='navigation-result-suggetion' [hidden]='isNavigate'> 
+        <p>请先点击导航按钮进行导航</p>
+        <img src="assets/imgs/suggest.PNG" alt="">
+      </div>
+      <div id='navigation-result-map'>
+      </div>
+      <div class='navigation-result-blank'>
+      </div>
+    </div>
+   
+  
   </div>
   <audio id='speak-audio'></audio>
 </ion-content>

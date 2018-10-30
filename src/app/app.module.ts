@@ -18,9 +18,22 @@ import { VersionPage } from '../pages/version/version';
 import { NicknamePage } from '../pages/nickname/nickname';
 import { PhoneNumberPage } from '../pages/phone-number/phone-number'
 import { FeedbackPage } from '../pages/feedback/feedback'
+import { LoginPage } from '../pages/login/login'
+import { RegisterPage } from '../pages/register/register'
+import { RegisterSuccessPage } from '../pages/register-success/register-success';
+import { MessagePage } from '../pages/message/message';
+import { DiscoverPage } from '../pages/discover/discover';
+import { BrowserPage } from '../pages/browser/browser';
+import { SharePage } from '../pages/share/share';
+import { UsernamePage } from '../pages/username/username';
+import { ShareMomentPage } from '../pages/share-moment/share-moment';
 
-import { BarcodeScanner } from '@ionic-native/barcode-scanner';
+
+import { QRScanner, QRScannerStatus } from '@ionic-native/qr-scanner';
 import { ThemeableBrowser, ThemeableBrowserOptions, ThemeableBrowserObject } from '@ionic-native/themeable-browser';
+import { Camera } from '@ionic-native/camera';
+import { File } from '@ionic-native/file';
+import { FileTransfer } from '@ionic-native/file-transfer';
 
 
 import { HttpModule, JsonpModule } from '@angular/http'
@@ -43,8 +56,16 @@ import { SplashScreen } from '@ionic-native/splash-screen';
     VersionPage,
     NicknamePage,
     PhoneNumberPage,
-    FeedbackPage
-    
+    FeedbackPage,
+    LoginPage,
+    RegisterPage,
+    RegisterSuccessPage,
+    MessagePage,
+    BrowserPage,
+    DiscoverPage,
+    SharePage,
+    UsernamePage,
+    ShareMomentPage
   ],
   imports: [
     BrowserModule,
@@ -72,13 +93,25 @@ import { SplashScreen } from '@ionic-native/splash-screen';
     VersionPage,
     NicknamePage,
     PhoneNumberPage,
-    FeedbackPage
+    FeedbackPage,
+    LoginPage,
+    RegisterPage,
+    RegisterSuccessPage,
+    MessagePage,
+    DiscoverPage,
+    BrowserPage,
+    SharePage,
+    UsernamePage,
+    ShareMomentPage
   ],
   providers: [
     StatusBar,
     SplashScreen,
-    BarcodeScanner,
     ThemeableBrowser,
+    QRScanner,
+    Camera,
+    File,
+    FileTransfer,
     {provide: ErrorHandler, useClass: IonicErrorHandler}
   ]
 })

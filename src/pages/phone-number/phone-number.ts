@@ -1,6 +1,9 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
-
+import { Storage } from '@ionic/storage';
+import { NgForm } from "@angular/forms";
+import { Http } from '@angular/http';
+import { ToastController } from 'ionic-angular';
 /**
  * Generated class for the PhoneNumberPage page.
  *
@@ -15,20 +18,56 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 })
 export class PhoneNumberPage {
   public phoneNumber;
-  public callback;
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
-    this.callback = this.navParams.get("callback");
-    this.phoneNumber = this.navParams.get("phoneNumber");
+  public user;
+  constructor(public navCtrl: NavController, public navParams: NavParams,private storage: Storage,public http: Http,public toastCtrl:ToastController) {
+
   }
 
   ionViewDidLoad() {
-    console.log('ionViewDidLoad PhoneNumberPage');
+    //console.log('ionViewDidLoad PhoneNumberPage');
   }
 
-  makeSure() {
-    this.callback({type:3,value:this.phoneNumber}).then(() => {
-      this.navCtrl.pop();
-    });
-    
+  ionViewDidEnter() {
+    this.storage.get('user').then((value) => {
+      if (value != null) {
+        this.user = value;
+        this.phoneNumber = value.phone;
+      }
+    })
   }
+
+  makeSure(form:NgForm) {
+    if(/^1[0-9]{10}$/.test(form.value.phoneNumber)){
+      let url = "https://njrzzk.com/app/a/app/tblRegistrar/update?id="+this.user.id+"&&phone="+form.value.phoneNumber;
+      this.http.get(url).subscribe(data => {
+        let temp=JSON.parse(data['_body']);
+        let msg;
+        if(temp.code==0){
+          msg='修改成功';
+          this.storage.set('user', temp.rows);
+          setTimeout(()=>{
+            this.navCtrl.pop();
+          },1100)
+        }else {
+          msg=temp.msg;
+        }
+        const toast=this.toastCtrl.create({
+          message:msg,
+          duration:1000,
+          position:'top'
+        })
+        toast.present();
+      });
+    }else {
+      const toast=this.toastCtrl.create({
+        message:'请输入有效的手机号码 ',
+        duration:1600,
+        position:'top'
+      })
+      toast.present();
+    }
+   
+  }
+
+
 }

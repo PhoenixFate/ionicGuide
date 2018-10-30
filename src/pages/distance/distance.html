@@ -14,12 +14,14 @@
 
 
 <ion-content padding>
-  <ion-list>
-    <ion-item>
-      <ion-label>距离：</ion-label>
-      <ion-input type='text' value='30'></ion-input>
-      <span item-end>(米)</span>
-    </ion-item>
-  </ion-list>
-  <button ion-button full (click)='makeSure()'>确定</button>
+  <form #f="ngForm" (ngSubmit)="makeSure(f)">
+      <ion-list>
+        <ion-item>
+          <ion-label>距离：</ion-label>
+          <ion-input type='number' [(ngModel)]="speakDistance" name="speakDistance"  required ></ion-input>
+          <span item-end>(米)</span>
+        </ion-item>
+      </ion-list>
+      <button ion-button full type="submit" [disabled]="!f.valid">确定</button>
+    </form>
 </ion-content>

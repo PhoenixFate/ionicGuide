@@ -1,4 +1,16 @@
 page-mine {
+    .toolbar-md{
+        padding: 4px;
+        min-height: 40px;
+        line-height: 40px;
+        text-align: center;
+    }
+    .toolbar-background-md{
+        background-color: #555;
+    }
+    .toolbar-title-md{
+        color: #fff;
+    }
     .head {
         height: 260px;
         width: 100%;
@@ -26,5 +38,14 @@ page-mine {
         float:right;
         margin-top: 110px;
         margin-right: 20px;
+    }
+
+    .my-login {
+        float:left;
+        height: 36px;
+        margin-left: 20px;
+        line-height: 100%;
+        margin-top: 110px;
+        
     }
 }

@@ -4,9 +4,13 @@ import { ScenicSpotPage } from '../scenic-spot/scenic-spot';
 import { Http } from '@angular/http';
 import { Storage } from '@ionic/storage';
 import $ from 'jquery';
+import { StatusBar } from '@ionic-native/status-bar';
+
 
 declare var BMap;
-declare const baidumap_location: any;
+declare var baidumap_location;
+declare var BMAP_NORMAL_MAP;
+declare var BMAP_HYBRID_MAP;
 @Component({
   selector: 'page-home',
   templateUrl: 'home.html'
@@ -21,13 +25,25 @@ export class HomePage {
   public scenicSpot = [];
   public alarm = 0;
   public alarmImg = 'assets/imgs/alarm2.png';
-  public location = { longitude: "0", latitude: "0" };
+  public location = { longitude: "116.404", latitude: "39.915" };
   public myInternal;
   public isPlay = false;
-  public scenicSpotFlag=[];
-  constructor(public navCtrl: NavController, private platform: Platform, public http: Http,private storage:Storage) {
+  public scenicSpotFlag = [];
+  public speakDistance;
+  public driving;
+  public isNavigate=false;
+  constructor(public navCtrl: NavController, private platform: Platform, public http: Http, private storage: Storage,private statusBar: StatusBar) {
+    //沉浸式并且悬浮透明
+    //this.statusBar.overlaysWebView(true);
     var that = this;
     this.myInternal = setInterval(function () {
+      that.storage.get('speakDistance').then((value) => {
+        if (value == null) {
+          that.speakDistance = 30
+        } else {
+          that.speakDistance = value;
+        }
+      })
       if (typeof baidumap_location === "undefined") {
         //alert("baidumap is undefined")
       } else {
@@ -42,7 +58,7 @@ export class HomePage {
               arr = lonlat.split(',');
               let point = new BMap.Point(arr[0], arr[1]);
               let myLocationPoint = new BMap.Point(that.location.longitude, that.location.latitude);
-              let distance = (that.map.getDistance(point, myLocationPoint) - 0).toFixed(2);
+              let distance = (that.map.getDistance(point, myLocationPoint) - 0).toFixed(0);
               that.scenicSpot[i].distance = distance;
             }
             let minDistance = parseFloat(that.scenicSpot[0].distance);
@@ -54,15 +70,14 @@ export class HomePage {
               }
               j++;
             }
-            if (minDistance <= 30 && !that.isPlay && !that.scenicSpotFlag[minIndex]) {
-              let url = 'http://tsn.baidu.com/text2audio?lan=zh&ctp=1&cuid=abcdxxx&tok=24.c9db7b3df791be77a72b9fd8250486f3.2592000.1540103485.282335-11796257&tex=' + that.scenicSpot[minIndex].descriptionForRead;
+            if ((minDistance < parseFloat(that.speakDistance)) && !that.isPlay && !that.scenicSpotFlag[minIndex]) {
+              let url = 'http://tsn.baidu.com/text2audio?lan=zh&ctp=1&cuid=abcdxxx&tok=24.56e92c5f4cad2467c0ad0db0cd6d3c56.2592000.1542777993.282335-11796257&tex=' + that.scenicSpot[minIndex].descriptionForRead;
               $('#speak-audio')[0].src = url;
               $('#speak-audio')[0].play();
-              that.scenicSpotFlag[minIndex]=true;
-              that.storage.set('scenicSpotFlag',that.scenicSpotFlag);
+              that.scenicSpotFlag[minIndex] = true;
+              that.storage.set('scenicSpotFlag', that.scenicSpotFlag);
               that.isPlay = true;
             }
-            //alert("您距离最近的景点" + minDistance + "米");
           }
           var allOverlay = that.map.getOverlays();
           for (let i = 0; i < allOverlay.length; i++) {
@@ -85,7 +100,7 @@ export class HomePage {
         });
 
       }
-    }, 8000)
+    }, 10000)
   }
 
   ionViewDidLoad() {
@@ -98,7 +113,7 @@ export class HomePage {
   }
 
   ionViewDidEnter() {
-   
+
   }
 
   baiduMapInitial() {
@@ -108,7 +123,12 @@ export class HomePage {
     map.addControl(new BMap.NavigationControl());
     map.addControl(new BMap.ScaleControl());
     map.addControl(new BMap.OverviewMapControl());
-    map.addControl(new BMap.MapTypeControl());
+    map.addControl(new BMap.MapTypeControl({
+      mapTypes: [
+        BMAP_NORMAL_MAP,
+        BMAP_HYBRID_MAP
+      ]
+    }));
     let point = new BMap.Point(113.332871, 24.819071);
     //设置中心点
     map.centerAndZoom(point, 17);
@@ -116,25 +136,39 @@ export class HomePage {
     map.enableScrollWheelZoom(true);
     //清除覆盖物
     map.clearOverlays();
+    this.driving = new BMap.DrivingRoute(map, { renderOptions: { map: map, panel:"navigation-result-map",autoViewport: true } });
     var that = this;
     var myIcon = new BMap.Icon("assets/imgs/red-marker.png", new BMap.Size(33, 35));
     let url = "https://njrzzk.com/app/a/app/tblScenicspot/getlist";
     this.http.get(url).subscribe(data => {
       let temp = JSON.parse(data['_body']).rows;
-      this.storage.get('scenicSpotLength').then((result)=>{
-        if(result==null || result!=temp.length){
-          this.storage.set('scenicSpotLength',temp.length);
-          let scenicSpotFlag=[];
-          for(let i=0;i<temp.length;i++){
+      this.storage.get('scenicSpotLength').then((result) => {
+        if (result == null || result != temp.length) {
+          this.storage.set('scenicSpotLength', temp.length);
+          let scenicSpotFlag = [];
+          for (let i = 0; i < temp.length; i++) {
             scenicSpotFlag.push(false);
           }
-          this.storage.set('scenicSpotFlag',scenicSpotFlag);
+          this.storage.set('scenicSpotFlag', scenicSpotFlag);
         }
-        this.storage.get('scenicSpotFlag').then((value)=>{
-          this.scenicSpotFlag=value;
-          console.log(this.scenicSpotFlag);
+
+        this.storage.get('currentDate').then((value) => {
+          let now = new Date();
+          if (now.toLocaleDateString() != value) {
+            let scenicSpotFlag = [];
+            for (let i = 0; i < temp.length; i++) {
+              scenicSpotFlag.push(false);
+            }
+            this.storage.set('scenicSpotFlag', scenicSpotFlag);
+            this.storage.set('currentDate', now.toLocaleDateString());
+          }
+        });
+
+        this.storage.get('scenicSpotFlag').then((value) => {
+          this.scenicSpotFlag = value;
         });
       });
+      //为各个点添加marker，并且计算距离
       for (let i = 0; i < temp.length; i++) {
         let lonlat = temp[i].lonLat;
         let arr = [];
@@ -146,7 +180,7 @@ export class HomePage {
         marker.setIcon(myIcon);
         map.addOverlay(marker);
         let myLocationPoint = new BMap.Point(this.location.longitude, this.location.latitude);
-        let distance = (this.map.getDistance(point, myLocationPoint) - 0).toFixed(2);
+        let distance = (this.map.getDistance(point, myLocationPoint) - 0).toFixed(0);
         temp[i].distance = distance;
         (function () {
           var thePoint = temp[i];
@@ -159,25 +193,23 @@ export class HomePage {
     }, err => {
 
     });
-
+    
   }
 
   showInfo(thisMaker, point, i) {
+    let destinationPoint = new BMap.Point(point.longitude, point.latitude);
+    let currentPoint = new BMap.Point(this.location.longitude, this.location.latitude);
+
     var that = this;
-    var sContent =
-      '<ul style="margin:0 0 5px 0;z-index:100" >'
-      + '<li  style="line-height: 26px;font-size: 16px; text-align:center;margin-top:20px;font-weight:bold"><span id="more">'
-      + point.name + '</span></li>'
-      + '<li style="line-height: 26px;font-size: 16px; text-align:center;margin-top:12px">距离该景点：' + point.distance + ' 米</li>'
-      + '<li style="line-height: 26px;font-size: 16px; text-align:center;margin-top:6px">'
-      + '<div  class="window-alarm" id="speak">'
-      + '<img src="assets/imgs/alarm2.png" class="window-alarm-image"/>'
-      + '</div></li>'
-      + '</ul>';
+    var sContent = '<div class="infoWindow-content">'
+      + '<div class="infoWindow-left"><h6 id="more" class="infoWindow-name">' + point.name + '</h6><h6>' + point.distance + ' 米</h6></div>'
+      + '<div class="infoWindow-right" ><div class="infoWindow-alarm"  id="speak"><img src="assets/imgs/alarm2.png" class="infoWindow-alarm-image"/></div></div>'
+      + '<div class="infoWindow-right2" ><div class="infoWindow-route"  id="route"><img src="assets/imgs/route.png"/></div></div>'
+      + '</div>';
     var infoWindow = new BMap.InfoWindow(sContent);  // 创建信息窗口对象
     thisMaker.openInfoWindow(infoWindow);   //图片加载完毕重绘infowindow
     //web点击事件为click，手机端点击事件为touchstart
-    let url = 'http://tsn.baidu.com/text2audio?lan=zh&ctp=1&cuid=abcdxxx&tok=24.c9db7b3df791be77a72b9fd8250486f3.2592000.1540103485.282335-11796257&tex=' + that.scenicSpot[i].descriptionForRead;
+    let url = 'http://tsn.baidu.com/text2audio?lan=zh&ctp=1&cuid=abcdxxx&tok=24.56e92c5f4cad2467c0ad0db0cd6d3c56.2592000.1542777993.282335-11796257&tex=' + that.scenicSpot[i].descriptionForRead;
     infoWindow.addEventListener('open', function () {
       $('#more').bind("click", function () {
         that.navCtrl.push(ScenicSpotPage, { "id": point.id });
@@ -196,6 +228,14 @@ export class HomePage {
         $('#speak-audio')[0].play();
         that.isPlay = true;
         that.alarmImg = 'assets/imgs/alarm2.png';
+      });
+      $('#route').bind("click", function () {
+        that.driving.search(currentPoint, destinationPoint);
+        that.isNavigate=true;
+      });
+      $('#route').bind("touchstart", function () {
+        that.driving.search(currentPoint, destinationPoint);
+        that.isNavigate=true;
       });
     })
     //两次绑定事件是为了解决bug
@@ -217,6 +257,14 @@ export class HomePage {
       that.isPlay = true;
       that.alarmImg = 'assets/imgs/alarm2.png';
     })
+    $('#route').bind("click", function () {
+      that.driving.search(currentPoint, destinationPoint);
+      that.isNavigate=true;
+    });
+    $('#route').bind("touchstart", function () {
+      that.driving.search(currentPoint, destinationPoint);
+      that.isNavigate=true;
+    });
   };
 
   changeAlarm() {
@@ -232,22 +280,24 @@ export class HomePage {
 
   showLocation() {
     if (typeof baidumap_location === "undefined") {
-      alert("baidumap is undefined");
+      //alert("baidumap is undefined");
       return;
     };
     //解决baidumap_location.getCurrentPosition卡顿没有反应的情况
-    if(this.location.latitude!='0'){
+    //先跳转到前一次记录的当前位置，再获取位置，再次跳转一次；解决卡顿。
+    //start
+    if (this.location.latitude != '116.404') {
+      this.map.setZoom(15);
       var allOverlay = this.map.getOverlays();
-          for (let i = 0; i < allOverlay.length; i++) {
-            if (allOverlay[i]) {
-              if (allOverlay[i].id) {
-                if (allOverlay[i].id = 'myLocation') {
-                  this.map.removeOverlay(allOverlay[i]);
-                }
-              }
-
+      for (let i = 0; i < allOverlay.length; i++) {
+        if (allOverlay[i]) {
+          if (allOverlay[i].id) {
+            if (allOverlay[i].id = 'myLocation') {
+              this.map.removeOverlay(allOverlay[i]);
             }
           }
+        }
+      }
       let myIcon = new BMap.Icon("assets/imgs/my-location.png", new BMap.Size(23, 28));
       let point = new BMap.Point(this.location.longitude, this.location.latitude);
       let marker = new BMap.Marker(point);
@@ -256,20 +306,21 @@ export class HomePage {
       this.map.addOverlay(marker);
       this.map.panTo(point);
     }
+    //end
 
-    var that=this;
+    var that = this;
     baidumap_location.getCurrentPosition((result) => {
-      //alert(JSON.stringify(result));
+      this.map.setZoom(15);
       var allOverlay = that.map.getOverlays();
-          for (let i = 0; i < allOverlay.length; i++) {
-            if (allOverlay[i]) {
-              if (allOverlay[i].id) {
-                if (allOverlay[i].id = 'myLocation') {
-                  that.map.removeOverlay(allOverlay[i]);
-                }
-              }
+      for (let i = 0; i < allOverlay.length; i++) {
+        if (allOverlay[i]) {
+          if (allOverlay[i].id) {
+            if (allOverlay[i].id = 'myLocation') {
+              that.map.removeOverlay(allOverlay[i]);
             }
-          }                
+          }
+        }
+      }
       let myIcon = new BMap.Icon("assets/imgs/my-location.png", new BMap.Size(23, 28));
       let point = new BMap.Point(JSON.stringify(result.longitude), JSON.stringify(result.latitude));
       let marker = new BMap.Marker(point);
@@ -277,14 +328,25 @@ export class HomePage {
       marker.setIcon(myIcon);
       that.map.addOverlay(marker);
       that.map.panTo(point);
+      
     }, error => {
       alert(error);
     });
   }
 
   toScenery() {
-    let point = new BMap.Point(113.332871, 24.819071);
-    this.map.panTo(point);
+    this.map.setZoom(15);
+    this.map.panTo(new BMap.Point(113.332871, 24.819071));
+  }
+
+  showNavigation() {
+    let navigationResult=document.getElementById("navigation-result");
+    navigationResult.style.display="block";
+  }
+
+  closeNavigation() {
+    let navigationResult=document.getElementById("navigation-result");
+    navigationResult.style.display="none";
   }
 
 }

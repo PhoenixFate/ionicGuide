@@ -4,22 +4,21 @@
   See http://ionicframework.com/docs/components/#navigation for more info on
   Ionic pages and navigation.
 -->
-<!-- <ion-header>
+<ion-header>
 
   <ion-navbar>
-    <ion-title>我的</ion-title>
+    <ion-title>我</ion-title>
   </ion-navbar>
 
-</ion-header> -->
+</ion-header>
 
 
 <ion-content>
-  <div class='head' (click)='toDetails(1)'>
-  
-      <img [src]="profile[0].content" alt="" class='myAvatar'>
-      <span class='myNickname'>{{profile[1].content}}</span>
-      <ion-icon name='arrow-forward' class='head-icon'></ion-icon>
-      <!-- <ion-icon name='arrow-forward' icon-end></ion-icon> -->
+  <div class='head'>
+      <img [src]='user.image?("https://njrzzk.com"+user.image):"assets/imgs/avatar-default.png"' alt=""  class='myAvatar' (click)='changeAvatar()'>
+      <span class='myNickname' [hidden]='!loginFlag'>{{user.nickname}}</span>
+      <button (click)='toLogin()' class='my-login' ion-button [hidden]='loginFlag'>登入</button>
+      <ion-icon name='arrow-forward' class='head-icon' (click)='toDetails(1)'></ion-icon>
   </div>
   <div>
     <ion-list>

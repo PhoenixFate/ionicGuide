@@ -1,4 +1,16 @@
 page-scenery {
+    .toolbar-md{
+        padding: 4px;
+        min-height: 40px;
+        line-height: 40px;
+        text-align: center;
+    }
+    .toolbar-background-md{
+        background-color: #555;
+    }
+    .toolbar-title-md{
+        color: #fff;
+    }
     #my-slides {
         height: 38%;
         width: 100%;
@@ -27,6 +39,7 @@ page-scenery {
         float: left;
     }
     .news-hot{
+        margin-top: 50px;
         margin-left: 14px;
     }
     .news-left img {

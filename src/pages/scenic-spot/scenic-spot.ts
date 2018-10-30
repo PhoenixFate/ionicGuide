@@ -23,7 +23,8 @@ export class ScenicSpotPage {
     let url="https://njrzzk.com/app/a/app/tblScenicspot/getDetail?id="+navParams.get("id");
     this.http.get(url).subscribe(data=>{
       let temp=JSON.parse(data['_body']).rows;
-      this.desc=temp[0].description;
+      this.desc=temp[0].descriptionForApp;
+      console.log(this.desc);
       this.descRead=temp[0].descriptionForRead;   
       console.log(temp);
     },err=>{

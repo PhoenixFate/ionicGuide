@@ -1,0 +1,34 @@
+<!--
+  Generated template for the DiscoverPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+  <ion-navbar>
+    <ion-title>发现</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content class='my-discover-content'>
+  <div class='my-discover-item' (click)='toShare()'>
+    <img src="assets/imgs/朋友圈.png" alt="" class='my-discover-logo'>
+    <span>驴友分享</span>
+    <img src="assets/imgs/forward.png" alt="" class='my-discover-forward'>
+  </div>
+  <div class='my-discover-item' (click)='toScan()' >
+    <img src="assets/imgs/扫一扫.png" alt="" class='my-discover-logo'>
+    <span>扫一扫</span>
+    <img src="assets/imgs/forward.png" alt="" class='my-discover-forward'>
+  </div>
+  <div class='my-discover-item' (click)='toJD()'>
+    <img src="assets/imgs/京东.png" alt="" class='my-discover-logo'>
+    <span>京东</span>
+    <img src="assets/imgs/forward.png" alt="" class='my-discover-forward'>
+  </div>
+  <div class='my-discover-item' (click)='toTB()'>
+    <img src="assets/imgs/淘宝.png" alt="" class='my-discover-logo'>
+    <span>淘宝</span>
+    <img src="assets/imgs/forward.png" alt="" class='my-discover-forward'>
+  </div>
+</ion-content>
