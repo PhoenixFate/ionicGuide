@@ -18,8 +18,11 @@
     <ion-list>
       <ion-item>
         <ion-label floating>用户名</ion-label>
-        <ion-input type="text" [(ngModel)]="username" name="username"  required></ion-input>
+        <ion-input type="text" [(ngModel)]="username" name="username"  required (ionBlur)="checkName()"></ion-input>
       </ion-item>
+      <ion-item no-lines [hidden]='!usernameUsed'>
+        <label class='my-check' >该用户名已被注册</label>
+    </ion-item>
       <ion-item>
         <ion-label floating>昵称</ion-label>
         <ion-input type="text" [(ngModel)]="nickname" name="nickname"  required></ion-input>
@@ -35,10 +38,10 @@
         <ion-input type="password" [(ngModel)]="checkPassword" name="checkPassword"  required></ion-input>
       </ion-item>
 
-      <ion-item no-lines>
-          <label class='my-check' [hidden]='password==checkPassword || checkPassword=="" '>两次密码输入不一致</label>
+      <ion-item no-lines [hidden]='password==checkPassword || checkPassword=="" '>
+          <label class='my-check' >两次密码输入不一致</label>
       </ion-item>
     </ion-list>
-    <button ion-button full type="submit" [disabled]="(!f.valid) || (password!=checkPassword) ">注册</button>
+    <button ion-button full type="submit" [disabled]="(!f.valid) || (password!=checkPassword) || usernameUsed" class='resigter-button'>注册</button>
   </form>
 </ion-content>

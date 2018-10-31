@@ -16,11 +16,11 @@ import { RegisterSuccessPage } from '../register-success/register-success';
   templateUrl: 'register.html',
 })
 export class RegisterPage {
-  public username;
-  public nickname;
-  public password;
+  public username=''
+  public nickname=''
+  public password=''
   public checkPassword="";
-
+  public usernameUsed=false;
   constructor(public navCtrl: NavController, public navParams: NavParams,public http: Http) {
   }
 
@@ -43,4 +43,21 @@ export class RegisterPage {
     });
   }
 
+  checkName(){
+    if(this.username==''){
+      this.usernameUsed=false;
+      return;
+    }else {
+      let url = "https://njrzzk.com/app/a/app/tblRegistrar/checkUserNameAndPass?username="+this.username;
+      this.http.get(url).subscribe(data => {
+        let temp=JSON.parse(data['_body']);
+        console.log(temp);
+        if(temp.code==0){
+          this.usernameUsed=false;
+        }else {
+          this.usernameUsed=true;
+        }
+      });
+    }
+  }
 }
