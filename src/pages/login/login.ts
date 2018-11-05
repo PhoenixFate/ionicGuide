@@ -49,10 +49,7 @@ export class LoginPage {
     this.storage.set('userTemp',userTemp);
     let url = "https://njrzzk.com/app/a/app/tblRegistrar/login?username="+form.value.username+"&&password="+form.value.password;
     this.http.get(url).subscribe(data => {
-      console.log(data);
-      console.log(data['_body']);
       let temp=JSON.parse(data['_body']);
-      console.log(temp);
       if(temp.code!==0){
         const toast=this.toastCtrl.create({
           message:temp.msg,

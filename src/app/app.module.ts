@@ -27,14 +27,14 @@ import { BrowserPage } from '../pages/browser/browser';
 import { SharePage } from '../pages/share/share';
 import { UsernamePage } from '../pages/username/username';
 import { ShareMomentPage } from '../pages/share-moment/share-moment';
-
+import { ShareImagePage } from '../pages/share-image/share-image';
 
 import { QRScanner, QRScannerStatus } from '@ionic-native/qr-scanner';
 import { ThemeableBrowser, ThemeableBrowserOptions, ThemeableBrowserObject } from '@ionic-native/themeable-browser';
 import { Camera } from '@ionic-native/camera';
 import { File } from '@ionic-native/file';
 import { FileTransfer } from '@ionic-native/file-transfer';
-
+import { ImagePicker } from '@ionic-native/image-picker';
 
 import { HttpModule, JsonpModule } from '@angular/http'
 import { StatusBar } from '@ionic-native/status-bar';
@@ -65,7 +65,8 @@ import { SplashScreen } from '@ionic-native/splash-screen';
     DiscoverPage,
     SharePage,
     UsernamePage,
-    ShareMomentPage
+    ShareMomentPage,
+    ShareImagePage
   ],
   imports: [
     BrowserModule,
@@ -102,7 +103,8 @@ import { SplashScreen } from '@ionic-native/splash-screen';
     BrowserPage,
     SharePage,
     UsernamePage,
-    ShareMomentPage
+    ShareMomentPage,
+    ShareImagePage
   ],
   providers: [
     StatusBar,
@@ -112,6 +114,7 @@ import { SplashScreen } from '@ionic-native/splash-screen';
     Camera,
     File,
     FileTransfer,
+    ImagePicker,
     {provide: ErrorHandler, useClass: IonicErrorHandler}
   ]
 })

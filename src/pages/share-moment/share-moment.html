@@ -7,12 +7,30 @@
 <ion-header>
 
   <ion-navbar>
-    <ion-title>shareMoment</ion-title>
+    <ion-title></ion-title>
+    <div class='my-share-publish' (click)='doPublish()'>
+        发表
+    </div>
   </ion-navbar>
 
 </ion-header>
 
 
 <ion-content padding>
-
+  <div class='my-div-textarea'>
+      <textarea name="" id="" placeholder="这一刻的想法..." [(ngModel)]='textareaValue' class='my-textarea'></textarea>
+  </div>
+  <div class='my-share-images'>
+    <div class='my-share-image' *ngFor='let item of imgs;let i=index'(click)='toShareImage(i)'>
+      <img src="https://njrzzk.com{{item}}" alt="">
+    </div>
+    
+    <div class='my-share-add-out' [hidden]='imgs.length>=9' (click)='selectPhoto()'>
+        <div class='my-share-add' >
+            <img src="assets/imgs/jia.png" alt="">
+        </div>
+      
+    </div>
+  </div>
+  
 </ion-content>

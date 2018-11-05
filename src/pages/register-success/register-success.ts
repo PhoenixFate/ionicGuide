@@ -31,7 +31,7 @@ export class RegisterSuccessPage {
     })
     toast.present();
     setTimeout(()=>{
-      this.navCtrl.popToRoot();
+      this.navCtrl.popTo(this.navCtrl.getByIndex(1));
     },2000)
   }
 

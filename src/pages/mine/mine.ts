@@ -6,14 +6,15 @@ import { VersionPage } from '../version/version';
 import { FeedbackPage } from '../feedback/feedback';
 import { LoginPage } from '../login/login';
 import { Storage } from '@ionic/storage';
-import { ToastController } from 'ionic-angular';
+
 import { MessagePage } from '../message/message';
 
+import { ToastController } from 'ionic-angular';
 import { Http } from '@angular/http';
 import { ActionSheetController } from 'ionic-angular';
 import { Camera, CameraOptions } from '@ionic-native/camera';
 import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-native/file-transfer';
-import { File } from '@ionic-native/file' ;
+import { File } from '@ionic-native/file';
 
 /**
  * Generated class for the MinePage page.
@@ -30,12 +31,15 @@ import { File } from '@ionic-native/file' ;
 export class MinePage {
   public user={username:'',phone:'',image:'',id:'',sex:'',nickname:''};
   public loginFlag=false;
-  constructor(public navCtrl: NavController, public navParams: NavParams,public actionSheetCtrl: ActionSheetController, private storage: Storage, public http: Http, public toastCtrl: ToastController, private camera: Camera,private transfer:FileTransfer, private file:File) {
+  constructor(public navCtrl: NavController, public navParams: NavParams,
+    public actionSheetCtrl: ActionSheetController, private storage: Storage, 
+    public http: Http, public toastCtrl: ToastController, 
+    private camera: Camera,private transfer:FileTransfer,
+     private file:File) {
   }
 
   ionViewDidEnter(){
     this.storage.get('user').then((value) => {
-      console.log(value);
       if(value==null){
         this.user={username:'',phone:'',image:'',id:'',sex:'',nickname:''};
         this.loginFlag=false;
@@ -110,27 +114,37 @@ export class MinePage {
 
 
   changeAvatar() {
-    const actionSheet = this.actionSheetCtrl.create({
-      buttons: [
-        {
-          text: '拍照',
-          handler:()=>{
-            this.doCamera();
+    if(this.loginFlag){
+      const actionSheet = this.actionSheetCtrl.create({
+        buttons: [
+          {
+            text: '拍照',
+            handler:()=>{
+              this.doCamera();
+            }
+          },
+          {
+            text: '从手机相册选择',
+            handler:()=>{
+              this.doLibrary();
+            }
+          },
+          {
+            text: '取消',
+            role: 'cancel'
           }
-        },
-        {
-          text: '从手机相册选择',
-          handler:()=>{
-            this.doLibrary();
-          }
-        },
-        {
-          text: '取消',
-          role: 'cancel'
-        }
-      ]
-    });
-    actionSheet.present();
+        ]
+      });
+      actionSheet.present();
+    }else {
+      const toast=this.toastCtrl.create({
+        message:'请先登入',
+        duration:1300,
+        position:'top'
+      })
+      toast.present();
+    }
+    
   }
 
   doCamera(){

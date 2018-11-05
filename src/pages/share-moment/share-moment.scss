@@ -1,3 +1,60 @@
 page-share-moment {
+    .my-div-textarea {
+        width: 90%;
+        height: 150px;
+        margin:10px auto 20px;
+    }
+    .my-textarea {
+        width: 100%;
+        height: 100%;
+        resize: none;
+        border: none;
+    }
+
+    .my-share-images {
+        height: 300px;
+        width:90%;
+        margin: 0 auto;
+    }
+    .my-share-image {
+        float:left;
+        height: 100px;
+        width: 33.33%;
+        //background-color: yellow;
+        text-align: center;
+    }
+
+    .my-share-image img {
+        height: 90px;
+        width: 90%;
+        margin-top:5px;
+    }
+
+    .my-share-add-out {
+        float:left;
+        height: 100px;
+        width: 33.33%;
+    }
+
+    .my-share-add {
+        background-color: #ddd;
+        text-align: center;
+        height: 90px;
+        width: 90%;
+        margin:5px auto 0;
+    }
+
+    .my-share-add img {
+        height: 40px;
+        width: 40px;
+        margin-top: 25px;
+    }
+
+    .my-share-publish {
+        float:right;
+        margin-right: 20px;
+        color: rgb(1, 184, 1);
+    }
+
 
 }

@@ -60,7 +60,7 @@ export class PhoneNumberPage {
       });
     }else {
       const toast=this.toastCtrl.create({
-        message:'请输入有效的手机号码 ',
+        message:'请输入11位有效的手机号码 ',
         duration:1600,
         position:'top'
       })
