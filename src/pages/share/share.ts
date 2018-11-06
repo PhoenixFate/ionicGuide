@@ -1,3 +1,4 @@
+import { ShareDetailPage } from './../share-detail/share-detail';
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { ShareMomentPage } from '../share-moment/share-moment';
@@ -10,7 +11,8 @@ import { File } from '@ionic-native/file';
 import { Storage } from '@ionic/storage';
 import { ToastController } from 'ionic-angular';
 import { ImagePicker, ImagePickerOptions } from '@ionic-native/image-picker';
-
+import { ModalController } from 'ionic-angular';
+import { GalleryModal } from 'ionic-gallery-modal';
 /**
  * Generated class for the SharePage page.
  *
@@ -27,7 +29,10 @@ export class SharePage {
   public user = { username: '', phone: '', image: '', id: '', sex: '', nickname: '' };
   public loginFlag = false;
   public page = 1;
-  public shares=[];
+  public shares = [];
+  public photos: any[] = [];
+  public imageArray: any[] = [];
+
   constructor(public navCtrl: NavController, public navParams: NavParams,
     public toastCtrl: ToastController,
     public actionSheetCtrl: ActionSheetController,
@@ -35,9 +40,10 @@ export class SharePage {
     private camera: Camera, private transfer: FileTransfer,
     private file: File,
     private imagePicker: ImagePicker,
-    public http: Http
+    public http: Http,
+    private modalCtrl: ModalController
   ) {
-    this.requestScenery('');
+    this.requestShares('');
   }
 
   ionViewDidLoad() {
@@ -152,21 +158,28 @@ export class SharePage {
     })
   }
 
-  requestScenery(infiniteScroll) {
-    let that = this;
+  requestShares(infiniteScroll) {
     let url = "https://njrzzk.com/app/a/app/tblPicTextShare/getPagelist?pageNum=" + this.page;
     this.http.get(url).subscribe(data => {
       if (data['_body']) {
         let temp = JSON.parse(data['_body']).rows;
-        let arr = [];
         for (let i = 0; i < temp.length; i++) {
-          let arr = temp[i].images.split('|');
-          for(let j=0;j<arr.length;j++){
-            arr[j]='https://njrzzk.com' + arr[j];
+          if (temp[i].images == [""]) {
+            temp[i].images = [];
+          } else {
+            let arr = temp[i].images.split('|');
+            for (let j = 0; j < arr.length; j++) {
+              arr[j] = 'https://njrzzk.com' + arr[j];
+            }
+            temp[i].images = arr;
           }
-          temp[i].images = arr;
           let updateTime = temp[i].updateDate.split(' ');
           temp[i].updateDate = updateTime[0];
+          if (temp[i].tblRegistrar.image != null) {
+            temp[i].tblRegistrar.image = 'https://njrzzk.com' + temp[i].tblRegistrar.image;
+          } else {
+            temp[i].tblRegistrar.image = "assets/imgs/avatar-default.png";
+          }
         }
         console.log(temp);
         this.shares = this.shares.concat(temp);
@@ -177,7 +190,7 @@ export class SharePage {
             infiniteScroll.enable(false);
           }
         }
-        
+
       }
 
     }, err => {
@@ -186,7 +199,64 @@ export class SharePage {
   }
 
   doInfinite(infiniteScroll) {
-    this.requestScenery(infiniteScroll)
+    this.requestShares(infiniteScroll)
+  }
+
+  toShareDetail(i) {
+    this.navCtrl.push(ShareDetailPage,{shareDetail:this.shares[i]});
+  }
+
+  doRefresh(refresher) {
+    let url = "https://njrzzk.com/app/a/app/tblPicTextShare/getPagelist?pageNum=" + 1;
+    this.http.get(url).subscribe(data => {
+      if (data['_body']) {
+        let temp = JSON.parse(data['_body']).rows;
+        for (let i = 0; i < temp.length; i++) {
+          if (temp[i].images == [""]) {
+            temp[i].images = [];
+          } else {
+            let arr = temp[i].images.split('|');
+            for (let j = 0; j < arr.length; j++) {
+              arr[j] = 'https://njrzzk.com' + arr[j];
+            }
+            temp[i].images = arr;
+          }
+          let updateTime = temp[i].updateDate.split(' ');
+          temp[i].updateDate = updateTime[0];
+          if (temp[i].tblRegistrar.image != null) {
+            temp[i].tblRegistrar.image = 'https://njrzzk.com' + temp[i].tblRegistrar.image;
+          } else {
+            temp[i].tblRegistrar.image = "assets/imgs/avatar-default.png";
+          }
+        }
+        this.shares = temp;
+        refresher.complete(); //当数据请求完成调用
+      }
+
+    }, err => {
+    })
+  }
+
+  changeArrayToGallery(array) {
+    this.photos= [];
+    for (let i = 0; i < array.length; i++) {
+      var object = {
+        "url": array[i]
+      };
+      this.photos.push(object);
+    }
+  }
+
+  //图片预览
+  openModal(i,j) {
+    this.imageArray=this.shares[i].images;
+    //图片数组转换成插件需要的数组 
+    this.changeArrayToGallery(this.imageArray);
+    // 显示图片预览 
+    let modal = this.modalCtrl.create(GalleryModal, {
+      photos: this.photos, initialSlide: j,
+    });
+    modal.present();
   }
 
 }

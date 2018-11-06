@@ -1,0 +1,56 @@
+<!--
+  Generated template for the ShareDetailPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-navbar>
+    <ion-title></ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content>
+  <div class='my-share-item clearfix'>
+    <div class='my-share-head'>
+      <img [src]='shareDetail.tblRegistrar.image' alt="">
+      <span class='my-share-username'>{{shareDetail.tblRegistrar.nickname?shareDetail.tblRegistrar.nickname:shareDetail.tblRegistrar.username}}</span>
+
+    </div>
+    <div class='my-share-body'>
+      <div>
+        <div class='my-share-content'>{{shareDetail.content}}</div>
+      </div>
+      <div class='my-share-images clearfix'>
+
+        <div class='my-share-image' (click)='openModal(j)' *ngFor='let img of shareDetail.images;let j=index'>
+          <img src="{{img}}" alt="">
+        </div>
+
+      </div>
+      <div class='my-share-datetime'>
+        {{shareDetail.createDate}}
+      </div>
+    </div>
+  </div>
+
+</ion-content>
+<div class='my-comment-bottom'>
+  <div class='my-comment'>
+    <div class='my-comment-left'>
+      <img src="assets/imgs/xie-copy.png" alt="" class="comment-write">
+      <textarea type="text" placeholder="写评论..." [(ngModel)]='textareaValue'></textarea>
+    </div>
+    <div class='my-comment-right'>
+      <!-- <button ion-button clear icon-only (click)="toggled = !toggled" [(emojiPickerIf)]="toggled" [emojiPickerDirection]="'top'" (emojiPickerSelect)="handleSelection($event)">
+      🤗
+</button> -->
+      <span (click)='doPublish()'>
+        发布
+      </span>
+    </div>
+  </div>
+</div>

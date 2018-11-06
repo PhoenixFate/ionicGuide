@@ -65,6 +65,7 @@ export class ShareMomentPage {
       this.imgs.push(imgUrl);
     }
     if (results) {
+      alert(JSON.stringify(results));
       this.doImagesUpload(results);
     }
   }
@@ -275,7 +276,7 @@ export class ShareMomentPage {
 
   //入口
   doImagesUpload(images) {
-    let host = 'https://njrzzk.com/app/a/app/tblPicTextShare/uploadFiles';
+    let host = 'https://njrzzk.com/app/a/app/tblPicTextShare/uploadImages';
     let params = new Map();
     params.set('id', this.user.id);
     this.doImagesUploadFile(host, params, images, self, res => {

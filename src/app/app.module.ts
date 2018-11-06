@@ -28,6 +28,9 @@ import { SharePage } from '../pages/share/share';
 import { UsernamePage } from '../pages/username/username';
 import { ShareMomentPage } from '../pages/share-moment/share-moment';
 import { ShareImagePage } from '../pages/share-image/share-image';
+import { ShareDetailPage } from './../pages/share-detail/share-detail';
+
+import { EmojiPickerModule } from '@ionic-tools/emoji-picker';
 
 import { QRScanner, QRScannerStatus } from '@ionic-native/qr-scanner';
 import { ThemeableBrowser, ThemeableBrowserOptions, ThemeableBrowserObject } from '@ionic-native/themeable-browser';
@@ -35,6 +38,9 @@ import { Camera } from '@ionic-native/camera';
 import { File } from '@ionic-native/file';
 import { FileTransfer } from '@ionic-native/file-transfer';
 import { ImagePicker } from '@ionic-native/image-picker';
+import * as ionicGalleryModal from 'ionic-gallery-modal';
+import { HAMMER_GESTURE_CONFIG } from '@angular/platform-browser';
+
 
 import { HttpModule, JsonpModule } from '@angular/http'
 import { StatusBar } from '@ionic-native/status-bar';
@@ -66,17 +72,21 @@ import { SplashScreen } from '@ionic-native/splash-screen';
     SharePage,
     UsernamePage,
     ShareMomentPage,
-    ShareImagePage
+    ShareImagePage,
+    ShareDetailPage
   ],
   imports: [
     BrowserModule,
     HttpModule,
     JsonpModule,
-    IonicModule.forRoot(MyApp,{
-      tabsHideOnSubPages:'true',
-      backButtonText:'返回'
+    ionicGalleryModal.GalleryModalModule,
+    EmojiPickerModule.forRoot(),
+    IonicModule.forRoot(MyApp, {
+      tabsHideOnSubPages: 'true',
+      backButtonText: '返回'
     }),
-    IonicStorageModule.forRoot()
+    IonicStorageModule.forRoot(),
+
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -104,7 +114,8 @@ import { SplashScreen } from '@ionic-native/splash-screen';
     SharePage,
     UsernamePage,
     ShareMomentPage,
-    ShareImagePage
+    ShareImagePage,
+    ShareDetailPage
   ],
   providers: [
     StatusBar,
@@ -115,7 +126,8 @@ import { SplashScreen } from '@ionic-native/splash-screen';
     File,
     FileTransfer,
     ImagePicker,
-    {provide: ErrorHandler, useClass: IonicErrorHandler}
+    { provide: ErrorHandler, useClass: IonicErrorHandler },
+    { provide: HAMMER_GESTURE_CONFIG, useClass: ionicGalleryModal.GalleryModalHammerConfig }
   ]
 })
-export class AppModule {}
+export class AppModule { }
