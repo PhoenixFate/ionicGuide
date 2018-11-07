@@ -32,6 +32,7 @@ import { ShareDetailPage } from './../pages/share-detail/share-detail';
 
 import { EmojiPickerModule } from '@ionic-tools/emoji-picker';
 
+
 import { QRScanner, QRScannerStatus } from '@ionic-native/qr-scanner';
 import { ThemeableBrowser, ThemeableBrowserOptions, ThemeableBrowserObject } from '@ionic-native/themeable-browser';
 import { Camera } from '@ionic-native/camera';

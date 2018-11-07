@@ -18,31 +18,27 @@ page-discover {
     .my-discover-content{
         height: 100%;
         width: 100%;
-        background-color:#f8f8f8;
+        background-color:#e9e9e9;
     }
     .my-discover-item {
-        height: 50;
+        height: 40px;
         width: 100%;
-        border-top: 1px solid #aaa;
-        border-bottom: 1px solid #aaa;
+        border-top: 0.5px solid #ccc;
+        border-bottom: 0.5px solid #ccc;
         margin-top: 30px;
-        line-height: 50px;
         background-color: #fff;
-        font-size: 16px;
     }
 
     .my-discover-item img {
-        vertical-align: middle;
-    }
-
-    .my-discover-item span {
-        margin-left: 20px;
+        display:inline-block;
     }
 
     .my-discover-logo{
-        height: 30px;
-        width: 30px;
+        float: left;
+        height: 24px;
+        width: 24px;
         margin-left: 20px;
+        margin-top: 7px;
     }
 
     .my-discover-forward {
@@ -50,7 +46,40 @@ page-discover {
         width: 26px;
         float: right;
         margin-right: 10px;
-        margin-top: 10px;
+        margin-top: 4px;
     }
 
+    .my-discover-name {
+        line-height: 38px;
+        margin-left: 14px;
+        display: inline-block;
+        height: 100%;
+    }
+
+
+    .my-discover-item-double {
+        border-top: 0.5px solid #ccc;
+        border-bottom: 0.5px solid #ccc;
+        margin-top: 30px;
+    }
+
+    .my-discover-item2 {
+        height: 40px;
+        width: 100%;
+        background-color: #fff;
+    }
+
+    .my-discover-hr1 {
+        width: 100%;
+        height: 1px;
+        background-color:#fff;
+    }
+
+    .my-discover-hr2 {
+        width: 100%;
+        height: 1px;
+        background-color:#ccc;
+        margin-left: 20px;
+    }
+    
 }

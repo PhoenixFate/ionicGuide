@@ -181,7 +181,6 @@ export class SharePage {
             temp[i].tblRegistrar.image = "assets/imgs/avatar-default.png";
           }
         }
-        console.log(temp);
         this.shares = this.shares.concat(temp);
         this.page++;
         if (infiniteScroll) {

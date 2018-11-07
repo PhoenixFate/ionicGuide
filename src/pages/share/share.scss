@@ -2,8 +2,8 @@ page-share {
     .my-share-camera{
         float: right;
         margin-right: 20px;
-        height: 28px;
-        width: 34px;
+        height: 22px;
+        width: 28px;
     }
 
     .my-share-camera img{
@@ -14,38 +14,38 @@ page-share {
     .my-share-item {
         padding-top: 16px;
         padding-bottom: 12px;
-        width: 100%;
+        width: 96%;
+        margin: 0 auto;
         min-height: 145px;
         border-top: 1px solid #ccc;
     }
 
     .my-share-left {
         float: left;
-        width: 16%;
+        width: 14%;
         min-height: 105px;
     }
 
     .my-share-left img {
         width: 84%;
-        margin-left: 20%;
+        margin-left: 16%;
+        margin-top: 6px;
     }
 
     .my-share-right {
-        margin-left: 1%;
         float: right;
-        width: 75%;
+        width: 83%;
         min-height: 105px;
-        margin-right: 4%;
     }
     .my-share-username {
         height: 30px;
         font-size: 20px;
         line-height: 30px;
-        color: rgb(56, 56, 153);
+        color: #4874b6;
     }
 
     .my-share-content {
-        width: 100%;
+        width: 96%;
         max-height: 75px;
         font-size: 16px;
         line-height: 25px;

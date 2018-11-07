@@ -65,7 +65,6 @@ export class ShareMomentPage {
       this.imgs.push(imgUrl);
     }
     if (results) {
-      alert(JSON.stringify(results));
       this.doImagesUpload(results);
     }
   }
@@ -101,14 +100,10 @@ export class ShareMomentPage {
           images += this.imgs[i];
         }
       }
-      //alert(images);
-      //alert(this.user.id);
-      //console.log(images);
       let url = "https://njrzzk.com/app/a/app/tblPicTextShare/submitShare";
 
       this.http.post(url, JSON.stringify({ "content": this.textareaValue, "images": images, 'tblRegistrar': { 'id': this.user.id } }), { headers: this.headers }).subscribe(data => {
         let temp = JSON.parse(data['_body']);
-        //alert(JSON.stringify(temp));
         if (temp.code == 0) {
           this.navCtrl.popTo(this.navCtrl.getByIndex(1));
         }
@@ -228,7 +223,6 @@ export class ShareMomentPage {
       if (!value.startsWith('file://')) {
         value = 'file://' + value;
       }
-      console.log('这里应该执行了吧.........');
       var observable = new Observable((sub: any) => {
         this.file.resolveLocalFilesystemUrl(value).then(entry => {
           (<FileEntry>entry).file(file => {
@@ -239,7 +233,6 @@ export class ShareMomentPage {
             reader.onloadend = () => {
               const imgBlob = new Blob([reader.result], { type: blob.type });
               this.formData.append('myfiles', imgBlob, timestamp + 'multy.jpg');
-              //console.log('已经成功一半了.................'+ + imgBlob);
               sub.next(null);
               sub.complete();
             };
@@ -256,7 +249,6 @@ export class ShareMomentPage {
   doImagesUploadFile(host: string, params: Map<string, string>, filePaths: Array<string>, context: any, success: Function, fail: Function) {
     this.formData = new FormData();
     this.ImagesUpload(filePaths).subscribe(data => {
-      console.log('开始上传........');
       params.forEach((value, key) => {
         this.formData.append(key, value);
       });
@@ -280,7 +272,6 @@ export class ShareMomentPage {
     let params = new Map();
     params.set('id', this.user.id);
     this.doImagesUploadFile(host, params, images, self, res => {
-      alert(JSON.stringify(res));
       let temp = JSON.parse(res['_body']);
       if (temp.code == 0) {
         for(let i=0;i<temp.rows.length;i++){

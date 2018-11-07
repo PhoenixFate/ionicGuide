@@ -13,22 +13,40 @@
 <ion-content class='my-discover-content'>
   <div class='my-discover-item' (click)='toShare()'>
     <img src="assets/imgs/朋友圈.png" alt="" class='my-discover-logo'>
-    <span>驴友分享</span>
+    <div class='my-discover-name'>
+      驴友分享
+    </div>
     <img src="assets/imgs/forward.png" alt="" class='my-discover-forward'>
   </div>
-  <div class='my-discover-item' (click)='toScan()' >
+  <div class='my-discover-item' (click)='toScan()'>
     <img src="assets/imgs/扫一扫.png" alt="" class='my-discover-logo'>
-    <span>扫一扫</span>
+    <div class='my-discover-name'>
+      扫一扫
+    </div>
     <img src="assets/imgs/forward.png" alt="" class='my-discover-forward'>
   </div>
-  <div class='my-discover-item' (click)='toJD()'>
-    <img src="assets/imgs/京东.png" alt="" class='my-discover-logo'>
-    <span>京东</span>
-    <img src="assets/imgs/forward.png" alt="" class='my-discover-forward'>
+
+  <div class='my-discover-item-double'>
+    <div class='my-discover-item2' (click)='toJD()'>
+      <img src="assets/imgs/京东.png" alt="" class='my-discover-logo'>
+      <div class='my-discover-name'>
+        京东
+      </div>
+
+      <img src="assets/imgs/forward.png" alt="" class='my-discover-forward'>
+    </div>
+    <div class='my-discover-hr1'>
+      <div class='my-discover-hr2'>
+      </div>
+    </div>
+    <div class='my-discover-item2' (click)='toTB()'>
+      <img src="assets/imgs/淘宝.png" alt="" class='my-discover-logo'>
+      <div class='my-discover-name'>
+        淘宝
+      </div>
+
+      <img src="assets/imgs/forward.png" alt="" class='my-discover-forward'>
+    </div>
   </div>
-  <div class='my-discover-item' (click)='toTB()'>
-    <img src="assets/imgs/淘宝.png" alt="" class='my-discover-logo'>
-    <span>淘宝</span>
-    <img src="assets/imgs/forward.png" alt="" class='my-discover-forward'>
-  </div>
+
 </ion-content>
