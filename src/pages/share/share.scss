@@ -49,9 +49,12 @@ page-share {
         max-height: 75px;
         font-size: 16px;
         line-height: 25px;
-        white-space: normal;
+        display: -webkit-box;
         overflow: hidden;
         text-overflow: ellipsis;
+        word-break:break-all;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp:3;
     }
 
     .clearfix:after {

@@ -24,7 +24,7 @@ export class ShareDetailPage {
   public textareaValue = '';
   public photos: any[] = [];
   public imageArray: any[] = [];
-  public headers = new Headers({ 'Content-Type': 'application/json' });
+  public headers = new Headers({ 'Content-Type': 'application/form-data' });
   public user = { username: '', phone: '', image: '', id: '', sex: '', nickname: '' };
   public shareComments = [];
   public defaultAvatar = 'assets/imgs/avatar-default.png';
@@ -37,6 +37,7 @@ export class ShareDetailPage {
     private storage: Storage,
   ) {
     this.shareDetail = navParams.get('shareDetail');
+    console.log(this.shareDetail);
     this.doGetComments('',1);
   }
 
@@ -86,8 +87,9 @@ export class ShareDetailPage {
       toast.present();
     } else {
       let url = "https://njrzzk.com/app/a/app/tblComment/submitComment?content=" + this.textareaValue + "&picTextId=" + this.shareDetail.id + "&registarId=" + this.user.id;
-      url = encodeURI(url);
-      this.http.get(url).subscribe(data => {
+      //let url = "https://njrzzk.com/app/a/app/tblComment/submitComment";
+      this.http.post(url, { "content": this.textareaValue, "picTextId": this.shareDetail.id , 'registarId': this.user.id }, { headers: this.headers }).subscribe(data => {
+      //this.http.get(url).subscribe(data => {
         let temp = JSON.parse(data['_body']);
         if (temp.code == 0) {
           this.doGetComments('',1);
@@ -127,7 +129,6 @@ export class ShareDetailPage {
     let url = "https://njrzzk.com/app/a/app/tblComment/getPagelist?pageNum="+this.page+"&picTextId=" + this.shareDetail.id;
     this.http.get(url).subscribe(data => {
       let temp = JSON.parse(data['_body']).rows;
-      console.log(temp);
       this.shareComments = this.shareComments.concat(temp);
       this.page++;
       if (infiniteScroll) {
@@ -144,4 +145,6 @@ export class ShareDetailPage {
   doInfinite(infiniteScroll) {
     this.doGetComments(infiniteScroll,0)
   }
+
+  
 }

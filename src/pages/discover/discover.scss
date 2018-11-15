@@ -23,8 +23,8 @@ page-discover {
     .my-discover-item {
         height: 40px;
         width: 100%;
-        border-top: 0.5px solid #ccc;
-        border-bottom: 0.5px solid #ccc;
+        border-top: 1px solid #ccc;
+        border-bottom: 1px solid #ccc;
         margin-top: 30px;
         background-color: #fff;
     }
@@ -58,8 +58,8 @@ page-discover {
 
 
     .my-discover-item-double {
-        border-top: 0.5px solid #ccc;
-        border-bottom: 0.5px solid #ccc;
+        border-top: 1px solid #ccc;
+        border-bottom: 1px solid #ccc;
         margin-top: 30px;
     }
 
@@ -73,6 +73,13 @@ page-discover {
         width: 100%;
         height: 1px;
         background-color:#fff;
+    }
+
+    .my-discover-hr1 hr{
+        margin-left: 20px;
+        background-color:#ccc;
+        height: 1px;
+        border: none;
     }
 
     .my-discover-hr2 {

@@ -39,12 +39,12 @@
     <a name='showPagesA' id='showPagesA' href='#comments'></a>
     <div class='my-comment-people clearfix' *ngFor='let item of shareComments;let i=index'>
       <div class='my-comment-people-left'>
-        <img [src]="item.tblRegistrar?(item.tblRegistrar.image?item.tblRegistrar.image:defaultAvatar):defaultAvatar"
+        <img [src]="item.tblRegistrar?(item.tblRegistrar.image?'https://njrzzk.com'+item.tblRegistrar.image:defaultAvatar):defaultAvatar"
           alt="">
       </div>
       <div class='my-comment-people-right'>
         <div class='my-comment-people-name'>
-          {{item.tblRegistrar?(item.tblRegistrar.username?item.tblRegistrar.username:defaultName):defaultName}}
+          {{item.tblRegistrar?(item.tblRegistrar.nickname?item.tblRegistrar.nickname:(item.tblRegistrar.username?item.tblRegistrar.username:defaultName)):defaultName}}
         </div>
         <div class='my-comment-people-content'>
           {{item.content}}
@@ -57,8 +57,8 @@
   </div>
 
   <ion-infinite-scroll (ionInfinite)='doInfinite($event)'>
-      <ion-infinite-scroll-content loadingSpinner='bubbles' loadingText='正在加载'></ion-infinite-scroll-content>
-    </ion-infinite-scroll>
+    <ion-infinite-scroll-content loadingSpinner='bubbles' loadingText='正在加载'></ion-infinite-scroll-content>
+  </ion-infinite-scroll>
 </ion-content>
 
 
@@ -71,9 +71,9 @@
     </div>
     <div class='my-comment-right'>
       <!-- 这里的报错不管 -->
-      <!-- <span (click)="toggled = !toggled" [(emojiPickerIf)]="toggled" [emojiPickerDirection]="'top'" (emojiPickerSelect)="handleSelection($event)">
+      <span (click)="toggled = !toggled" [(emojiPickerIf)]="toggled" [emojiPickerDirection]="'top'" (emojiPickerSelect)="handleSelection($event)">
         🤗
-      </span> -->
+      </span>
 
       <span (click)='doPublish()'>
         发布

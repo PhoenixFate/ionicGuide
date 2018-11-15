@@ -60,31 +60,44 @@ export class SharePage {
         this.user = value;
       }
     })
+    this.doRefresh('');
   }
 
   selectPhoto() {
-    const actionSheet = this.actionSheetCtrl.create({
-      buttons: [
-        {
-          text: '拍照',
-          handler: () => {
-            //this.navCtrl.push(ShareMomentPage, { imgUrl: 'assets/imgs/avatar-ben.png' });
-            this.doCamera();
-          }
-        },
-        {
-          text: '从手机相册选择',
-          handler: () => {
-            this.doLibrary();
-          }
-        },
-        {
-          text: '取消',
-          role: 'cancel'
-        }
-      ]
-    });
-    actionSheet.present();
+    this.storage.get('publishMessage').then((value) => {
+      if(value!=null){
+        this.navCtrl.push(ShareMomentPage, { getStorage: 1 });
+      }else {
+        const actionSheet = this.actionSheetCtrl.create({
+          buttons: [
+            {
+              text: '文字',
+              handler: () => {
+                this.doText();
+              }
+            },
+            {
+              text: '拍照',
+              handler: () => {
+                this.doCamera();
+              }
+            },
+            {
+              text: '从手机相册选择',
+              handler: () => {
+                this.doLibrary();
+              }
+            },
+            {
+              text: '取消',
+              role: 'cancel'
+            }
+          ]
+        });
+        actionSheet.present();
+      }
+    })
+   
   }
 
   share() {
@@ -99,6 +112,10 @@ export class SharePage {
     } else {
       this.selectPhoto();
     }
+  }
+
+  doText(){
+    this.navCtrl.push(ShareMomentPage)
   }
 
   doCamera() {
@@ -229,7 +246,9 @@ export class SharePage {
           }
         }
         this.shares = temp;
-        refresher.complete(); //当数据请求完成调用
+        if(refresher){
+          refresher.complete(); //当数据请求完成调用
+        }
       }
 
     }, err => {

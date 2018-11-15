@@ -56,5 +56,82 @@ page-share-moment {
         color: rgb(1, 184, 1);
     }
 
+    .save-changes {
+        position: absolute;
+        top:40%;
+        left:15%;
+        width: 70%;
+        height: 100px;
+        background-color: #fff;
+        padding: 10px;
+    }
+
+    .save-changes a {
+        text-decoration: none;
+        font-size: 18px;
+        display:inline-block;
+        height: 40px;
+        line-height: 40px;
+        margin-right: 12px;
+    }
+
+    .save-message {
+        height: 40px;
+        width: 100%;
+        font-size: 18px;
+        line-height: 40px;
+        padding-left: 36px;
+
+    }
+
+    .save-buttons {
+        height: 40px;
+        width: 100%;
+
+    }
+
+    .save-cancel {
+        float:right;
+        border:none;
+        color:#bbb;
+        width: 70px;
+    }
+
+    .save-save {
+        float:right;
+        border:none;
+        color:rgb(24, 204, 24);
+        width: 50px;
+    }
+
+    #save-all {
+        position: absolute;
+        top:0;
+        left:0;
+        height: 100%;
+        width: 100%;
+        background-color:rgba(233,233,233,0.5);
+        display: none;
+    }
+
+    // .my-back {
+    //     float:left;
+    //     width: 50px;
+    //     height: 30px;
+    //     font-size: 18px;
+    // }
+
+    .my-back1 {
+        position: relative;
+    }
+
+    .my-back2 {
+        position: absolute;
+        left:0;
+    }
+
+    .my-back1 span{
+        margin-left: 5px;
+    }
 
 }

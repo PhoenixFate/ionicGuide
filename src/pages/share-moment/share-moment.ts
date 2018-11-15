@@ -19,7 +19,7 @@ import { ForkJoinObservable } from 'rxjs/observable/ForkJoinObservable';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/toPromise';
-
+import $ from 'jquery';
 /**
  * Generated class for the ShareMomentPage page.
  *
@@ -34,14 +34,6 @@ import 'rxjs/add/operator/toPromise';
 })
 export class ShareMomentPage {
   public user = { username: '', phone: '', image: '', id: '', sex: '', nickname: '' };
-  // public imgs=["assets/imgs/avatar-luke.png",
-  // "assets/imgs/avatar-luke.png",
-  // "assets/imgs/avatar-han.png",
-  // "assets/imgs/avatar-leia.png",
-  // "assets/imgs/avatar-poe.png",
-  // "assets/imgs/avatar-rey.png",
-  // "assets/imgs/avatar-finn.png",
-  // "assets/imgs/avatar-ben.png"];
   public imgs = [];
   public textareaValue = '';
   public headers = new Headers({ 'Content-Type': 'application/json' });
@@ -61,6 +53,13 @@ export class ShareMomentPage {
   ) {
     let imgUrl = navParams.get('imgUrl');
     let results = navParams.get('results');
+    let getStorage=navParams.get('getStorage');
+    if(getStorage){
+      this.storage.get('publishMessage').then((value) => {
+        this.imgs=value.imgs;
+        this.textareaValue=value.textareaValue;
+      })
+    }
     if (imgUrl) {
       this.imgs.push(imgUrl);
     }
@@ -105,6 +104,7 @@ export class ShareMomentPage {
       this.http.post(url, JSON.stringify({ "content": this.textareaValue, "images": images, 'tblRegistrar': { 'id': this.user.id } }), { headers: this.headers }).subscribe(data => {
         let temp = JSON.parse(data['_body']);
         if (temp.code == 0) {
+          this.storage.remove('publishMessage');
           this.navCtrl.popTo(this.navCtrl.getByIndex(1));
         }
       }, err => {
@@ -274,7 +274,7 @@ export class ShareMomentPage {
     this.doImagesUploadFile(host, params, images, self, res => {
       let temp = JSON.parse(res['_body']);
       if (temp.code == 0) {
-        for(let i=0;i<temp.rows.length;i++){
+        for (let i = 0; i < temp.rows.length; i++) {
           let imgUrl = temp.rows[i].src;
           this.imgs.push(imgUrl);
         }
@@ -282,6 +282,22 @@ export class ShareMomentPage {
     }, error => {
       alert(JSON.stringify(error));
     });
+  }
+
+
+  doCancel() {
+    this.storage.remove('publishMessage');
+    this.navCtrl.pop(); 
+  }
+
+  goBack() {
+    $('#save-all').show();
+  }
+
+  doSave(){
+    let publishMessage={'imgs':this.imgs,'textareaValue':this.textareaValue};
+    this.storage.set('publishMessage', publishMessage);
+    this.navCtrl.pop(); 
   }
 
 }

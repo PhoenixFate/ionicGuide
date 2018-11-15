@@ -6,10 +6,20 @@
 -->
 <ion-header>
 
-  <ion-navbar>
+  <!-- <ion-navbar (click)="goBack()">  -->
+  <ion-navbar hideBackButton="true">
+    <ion-buttons left>
+       <button ion-button icon-only (click)="goBack()" class='my-back1'>
+          <ion-icon ios="ios-arrow-back" md="md-arrow-back" class='my-back2'></ion-icon>
+          <span>朋友圈</span>
+       </button>
+    </ion-buttons>
+    <!-- <div class='my-back' (click)="goBack()">
+        <ion-icon ios="ios-arrow-back" md="md-arrow-back" ></ion-icon>
+    </div> -->
     <ion-title></ion-title>
     <div class='my-share-publish' (click)='doPublish()'>
-        发表
+      发表
     </div>
   </ion-navbar>
 
@@ -18,19 +28,31 @@
 
 <ion-content padding>
   <div class='my-div-textarea'>
-      <textarea name="" id="" placeholder="这一刻的想法..." [(ngModel)]='textareaValue' class='my-textarea'></textarea>
+    <textarea name="" id="" placeholder="这一刻的想法..." [(ngModel)]='textareaValue' class='my-textarea'></textarea>
   </div>
   <div class='my-share-images'>
-    <div class='my-share-image' *ngFor='let item of imgs;let i=index'(click)='toShareImage(i)'>
+    <div class='my-share-image' *ngFor='let item of imgs;let i=index' (click)='toShareImage(i)'>
       <img src="https://njrzzk.com{{item}}" alt="">
     </div>
-    
+
     <div class='my-share-add-out' [hidden]='imgs.length>=9' (click)='selectPhoto()'>
-        <div class='my-share-add' >
-            <img src="assets/imgs/jia.png" alt="">
-        </div>
-      
+      <div class='my-share-add'>
+        <img src="assets/imgs/jia.png" alt="">
+      </div>
+
     </div>
   </div>
-  
+  <div id='save-all'>
+    <div class='save-changes'>
+      <div class='save-message'>
+        是否保存此消息？
+      </div>
+      <div class='save-buttons'>
+        <a class='save-save' href='#' (click)='doSave()'>保存</a>
+        <a class='save-cancel' href='#' (click)='doCancel()'>不保存</a>
+
+      </div>
+    </div>
+  </div>
+
 </ion-content>

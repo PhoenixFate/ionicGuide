@@ -18,33 +18,10 @@
 
 <ion-content>
   <ion-refresher (ionRefresh)="doRefresh($event)">
-    <ion-refresher-content pullingIcon="arrow-dropdown" pullingText="Pull to refresh" refreshingSpinner="circles"
-      refreshingText="Refreshing...">
+    <ion-refresher-content pullingIcon="arrow-dropdown" pullingText="下拉刷新" refreshingSpinner="circles"
+      refreshingText="正在刷新...">
     </ion-refresher-content>
   </ion-refresher>
-
-  <!-- <div class='my-share-item clearfix'>
-    <div class='my-share-left'>
-      <img src="assets/imgs/avatar-han.png" alt="">
-    </div>
-    <div class='my-share-right clearfix'>
-      <div class='my-share-username'>詹姆斯</div>
-      <div class='my-share-content'>丹尼-格林命中三分为猛龙续上火力，
-        詹姆斯带领湖人打出一波8-0的反击三节打完，猛龙依旧以101-80领先湖人21分。
-        末节比赛，鲍尔连续命中两记三分，帮助湖人打停猛龙，但由于之前落后分差过大，
-        时间已经不站在他们这边了。最终，猛龙客场121-107轻取湖人，取得三连胜。
-      </div>
-      <div class='my-share-images clearfix'>
-        <div class='my-share-image-1'>
-          <img src="assets/imgs/advance-card-alaska.jpg" alt="">
-        </div>
-
-      </div>
-      <div class='my-share-datetime'>
-        2018-10-21
-      </div>
-    </div>
-  </div> -->
 
   <div class='my-share-item clearfix' *ngFor='let item of shares;let i=index'>
     <div class='my-share-left'>

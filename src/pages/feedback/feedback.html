@@ -14,14 +14,30 @@
 
 
 <ion-content padding>
+    <form #f="ngForm" (ngSubmit)="makeSure(f)">
   <ion-list>
     <ion-item>
       <ion-label>标题：</ion-label>
-      <ion-input type='text'></ion-input>
+      <ion-input type='text'  [(ngModel)]="title" required name="title"></ion-input>
     </ion-item>
-    
+  </ion-list>
+  <ion-list>
+    <ion-item>
+      <ion-label stacked style="font-size: 16px;">问题类型</ion-label>
+      <ion-select [(ngModel)]="typeTxt" (ngModelChange)="switchType()" interface="popover" style="height:45px;"
+        placeholder="请选择" name="typeTxt" required>
+        <!-- <ion-option value="0">请选择</ion-option> -->
+        <div *ngFor="let typeData of typeDataArr">
+          <ion-option value="{{typeData?.id}}">{{typeData?.type}}</ion-option>
+        </div>
+      </ion-select>
+    </ion-item>
   </ion-list>
   <h5 class='feedback-title'>内容：</h5>
-  <textarea class='feedback-content'></textarea>
-  <button ion-button full (click)='makeSure()'>确定</button>
+  <textarea class='feedback-content' required  [(ngModel)]="textareaValue" name="textareaValue"></textarea>
+  <button ion-button full type="submit" [disabled]="!f.valid">提交</button>
+</form>
+
+
+
 </ion-content>
