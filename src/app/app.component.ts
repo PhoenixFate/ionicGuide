@@ -2,20 +2,24 @@ import { Component } from '@angular/core';
 import { Platform } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
-
+import { Http, Jsonp } from '@angular/http';
 import { TabsPage } from '../pages/tabs/tabs';
 import { WelcomePage } from '../pages/welcome/welcome';
 import { Storage } from '@ionic/storage';
 
-// declare const baidumap_location: any;
 @Component({
   templateUrl: 'app.html'
 })
 export class MyApp {
   rootPage: any = TabsPage;
   public myInternal;
-  constructor(platform: Platform, statusBar: StatusBar, splashScreen: SplashScreen, private storage: Storage) {
-  
+  constructor(platform: Platform, statusBar: StatusBar, splashScreen: SplashScreen, private storage: Storage, public http: Http, public jsonp: Jsonp) {
+    let url = "https://njrzzk.com/app/a/app/tblInformation/getBaiduDescription";
+    this.http.get(url).subscribe(data => {
+      if (JSON.parse(data['_body']).access_token) {
+        this.storage.set('access_token', JSON.parse(data['_body']).access_token);
+      }
+    });
     //通过key，判断曾经是否进入过引导页
     this.storage.get('firstIn').then((result) => {
       //result=false;
@@ -39,21 +43,6 @@ export class MyApp {
         this.storage.set('speakDistance', 30);
       }
     })
-
-    //无效
-    // this.myInternal = setInterval(function () {
-    //   if (typeof baidumap_location === "undefined") {
-    //     //alert("baidumap is undefined")
-    //   } else {
-    //     console.log("not undefined")
-    //     baidumap_location.getCurrentPosition((result) => {
-    //       let myLocation = { longitude: JSON.stringify(result.longitude), latitude: JSON.stringify(result.latitude) };
-
-    //     })
-    //     clearInterval(this.myInternal);
-    //   }
-    //   console.log("app");
-    // },1000)
 
     platform.ready().then(() => {
       // Okay, so the platform is ready and our plugins are available.

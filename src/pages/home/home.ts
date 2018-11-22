@@ -31,10 +31,14 @@ export class HomePage {
   public scenicSpotFlag = [];
   public speakDistance;
   public driving;
-  public isNavigate=false;
-  constructor(public navCtrl: NavController, private platform: Platform, public http: Http, private storage: Storage,private statusBar: StatusBar) {
+  public isNavigate = false;
+  public accessToken;
+  constructor(public navCtrl: NavController, private platform: Platform, public http: Http, private storage: Storage, private statusBar: StatusBar) {
     //沉浸式并且悬浮透明
     //this.statusBar.overlaysWebView(true);
+    this.storage.get('access_token').then((value) => {
+      this.accessToken = value;
+    })
     var that = this;
     this.myInternal = setInterval(function () {
       that.storage.get('speakDistance').then((value) => {
@@ -71,7 +75,7 @@ export class HomePage {
               j++;
             }
             if ((minDistance < parseFloat(that.speakDistance)) && !that.isPlay && !that.scenicSpotFlag[minIndex]) {
-              let url = 'http://tsn.baidu.com/text2audio?lan=zh&ctp=1&cuid=abcdxxx&tok=24.56e92c5f4cad2467c0ad0db0cd6d3c56.2592000.1542777993.282335-11796257&tex=' + that.scenicSpot[minIndex].descriptionForRead;
+              let url = 'http://tsn.baidu.com/text2audio?lan=zh&ctp=1&cuid=abcdxxx&tok=' + that.accessToken + '&tex=' + that.scenicSpot[minIndex].descriptionForRead;
               $('#speak-audio')[0].src = url;
               $('#speak-audio')[0].play();
               that.scenicSpotFlag[minIndex] = true;
@@ -136,7 +140,7 @@ export class HomePage {
     map.enableScrollWheelZoom(true);
     //清除覆盖物
     map.clearOverlays();
-    this.driving = new BMap.DrivingRoute(map, { renderOptions: { map: map, panel:"navigation-result-map",autoViewport: true } });
+    this.driving = new BMap.DrivingRoute(map, { renderOptions: { map: map, panel: "navigation-result-map", autoViewport: true } });
     var that = this;
     var myIcon = new BMap.Icon("assets/imgs/red-marker.png", new BMap.Size(33, 35));
     let url = "https://njrzzk.com/app/a/app/tblScenicspot/getlist";
@@ -193,7 +197,7 @@ export class HomePage {
     }, err => {
 
     });
-    
+
   }
 
   showInfo(thisMaker, point, i) {
@@ -209,7 +213,7 @@ export class HomePage {
     var infoWindow = new BMap.InfoWindow(sContent);  // 创建信息窗口对象
     thisMaker.openInfoWindow(infoWindow);   //图片加载完毕重绘infowindow
     //web点击事件为click，手机端点击事件为touchstart
-    let url = 'http://tsn.baidu.com/text2audio?lan=zh&ctp=1&cuid=abcdxxx&tok=24.56e92c5f4cad2467c0ad0db0cd6d3c56.2592000.1542777993.282335-11796257&tex=' + that.scenicSpot[i].descriptionForRead;
+    let url = 'http://tsn.baidu.com/text2audio?lan=zh&ctp=1&cuid=abcdxxx&tok='+that.accessToken+'&tex=' + that.scenicSpot[i].descriptionForRead;
     infoWindow.addEventListener('open', function () {
       $('#more').bind("click", function () {
         that.navCtrl.push(ScenicSpotPage, { "id": point.id });
@@ -231,11 +235,11 @@ export class HomePage {
       });
       $('#route').bind("click", function () {
         that.driving.search(currentPoint, destinationPoint);
-        that.isNavigate=true;
+        that.isNavigate = true;
       });
       $('#route').bind("touchstart", function () {
         that.driving.search(currentPoint, destinationPoint);
-        that.isNavigate=true;
+        that.isNavigate = true;
       });
     })
     //两次绑定事件是为了解决bug
@@ -259,11 +263,11 @@ export class HomePage {
     })
     $('#route').bind("click", function () {
       that.driving.search(currentPoint, destinationPoint);
-      that.isNavigate=true;
+      that.isNavigate = true;
     });
     $('#route').bind("touchstart", function () {
       that.driving.search(currentPoint, destinationPoint);
-      that.isNavigate=true;
+      that.isNavigate = true;
     });
   };
 
@@ -328,7 +332,7 @@ export class HomePage {
       marker.setIcon(myIcon);
       that.map.addOverlay(marker);
       that.map.panTo(point);
-      
+
     }, error => {
       alert(error);
     });
@@ -340,13 +344,13 @@ export class HomePage {
   }
 
   showNavigation() {
-    let navigationResult=document.getElementById("navigation-result");
-    navigationResult.style.display="block";
+    let navigationResult = document.getElementById("navigation-result");
+    navigationResult.style.display = "block";
   }
 
   closeNavigation() {
-    let navigationResult=document.getElementById("navigation-result");
-    navigationResult.style.display="none";
+    let navigationResult = document.getElementById("navigation-result");
+    navigationResult.style.display = "none";
   }
 
 }

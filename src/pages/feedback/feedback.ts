@@ -29,9 +29,9 @@ export class FeedbackPage {
   }
 
   makeSure(form:NgForm) {
-    console.log(form.value.title);
-    console.log(form.value.typeTxt);
-    console.log(form.value.textareaValue);
+    // console.log(form.value.title);
+    // console.log(form.value.typeTxt);
+    // console.log(form.value.textareaValue);
     const toast=this.toastCtrl.create({
       message:'感谢您的反馈',
       duration:1000,

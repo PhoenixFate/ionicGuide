@@ -87,9 +87,7 @@ export class ShareDetailPage {
       toast.present();
     } else {
       let url = "https://njrzzk.com/app/a/app/tblComment/submitComment?content=" + this.textareaValue + "&picTextId=" + this.shareDetail.id + "&registarId=" + this.user.id;
-      //let url = "https://njrzzk.com/app/a/app/tblComment/submitComment";
       this.http.post(url, { "content": this.textareaValue, "picTextId": this.shareDetail.id , 'registarId': this.user.id }, { headers: this.headers }).subscribe(data => {
-      //this.http.get(url).subscribe(data => {
         let temp = JSON.parse(data['_body']);
         if (temp.code == 0) {
           this.doGetComments('',1);
