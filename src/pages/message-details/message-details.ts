@@ -1,9 +1,8 @@
-import { MessageDetailsPage } from './../message-details/message-details';
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 
 /**
- * Generated class for the MessagePage page.
+ * Generated class for the MessageDetailsPage page.
  *
  * See https://ionicframework.com/docs/components/#navigation for more info on
  * Ionic pages and navigation.
@@ -11,20 +10,16 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 
 @IonicPage()
 @Component({
-  selector: 'page-message',
-  templateUrl: 'message.html',
+  selector: 'page-message-details',
+  templateUrl: 'message-details.html',
 })
-export class MessagePage {
+export class MessageDetailsPage {
 
   constructor(public navCtrl: NavController, public navParams: NavParams) {
   }
 
   ionViewDidLoad() {
-    console.log('ionViewDidLoad MessagePage');
-  }
-
-  toDetailsPage(){
-    this.navCtrl.push(MessageDetailsPage);
+    console.log('ionViewDidLoad MessageDetailsPage');
   }
 
 }

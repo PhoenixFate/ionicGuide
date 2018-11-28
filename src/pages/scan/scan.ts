@@ -10,7 +10,7 @@ export class ScanPage {
   light: boolean;//判断闪光灯 
   frontCamera: boolean;//判断摄像头 
   isShow: boolean = false;//控制显示背景，避免切换页面卡顿 
-  constructor(private navCtrl: NavController, private navParams: NavParams, private qrScanner: QRScanner, private viewCtrl: ViewController,private themeableBrowser: ThemeableBrowser) { //默认为false 
+  constructor(private navCtrl: NavController, private navParams: NavParams, private qrScanner: QRScanner, private viewCtrl: ViewController, private themeableBrowser: ThemeableBrowser) { //默认为false 
     this.light = false;
     this.frontCamera = false;
   }
@@ -124,5 +124,5 @@ export class ScanPage {
   ionViewWillLeave() {
     this.hideCamera();
   }
-} 
+}
 

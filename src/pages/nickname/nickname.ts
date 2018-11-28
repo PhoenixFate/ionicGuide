@@ -2,8 +2,8 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { Storage } from '@ionic/storage';
 import { NgForm } from "@angular/forms";
-import { Http } from '@angular/http';
 import { ToastController } from 'ionic-angular';
+import { HttpServiceProvider } from '../../providers/http-service/http-service';
 /**
  * Generated class for the NicknamePage page.
  *
@@ -19,7 +19,11 @@ import { ToastController } from 'ionic-angular';
 export class NicknamePage {
   public nickname;
   public user;
-  constructor(public navCtrl: NavController, public navParams: NavParams, private storage: Storage,public http: Http,public toastCtrl:ToastController) {
+  constructor(public navCtrl: NavController, 
+    public navParams: NavParams, 
+    private storage: Storage,
+    public toastCtrl:ToastController,
+    public httpServiceProvider:HttpServiceProvider) {
   }
 
   ionViewDidLoad() {
@@ -36,10 +40,9 @@ export class NicknamePage {
   }
 
   makeSure(form:NgForm) {
-    let id=this.user.id;
-    let url = "https://njrzzk.com/app/a/app/tblRegistrar/update?id="+this.user.id+"&&nickname="+form.value.nickname;
-    this.http.get(url).subscribe(data => {
-      let temp=JSON.parse(data['_body']);
+    //请求获得轮播图数据
+    this.httpServiceProvider.httpGet("tblRegistrar/update?id="+this.user.id+"&&nickname="+form.value.nickname,(data)=>{
+      let temp=JSON.parse(data);
       if(temp.code==0){
         const toast=this.toastCtrl.create({
           message:"修改成功",
@@ -60,5 +63,6 @@ export class NicknamePage {
         toast.present();
       }
     });
+
   }
 }

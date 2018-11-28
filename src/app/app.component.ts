@@ -2,27 +2,30 @@ import { Component } from '@angular/core';
 import { Platform } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
-import { Http, Jsonp } from '@angular/http';
 import { TabsPage } from '../pages/tabs/tabs';
 import { WelcomePage } from '../pages/welcome/welcome';
 import { Storage } from '@ionic/storage';
-
+import { HttpServiceProvider } from '../providers/http-service/http-service';
 @Component({
   templateUrl: 'app.html'
 })
 export class MyApp {
   rootPage: any = TabsPage;
   public myInternal;
-  constructor(platform: Platform, statusBar: StatusBar, splashScreen: SplashScreen, private storage: Storage, public http: Http, public jsonp: Jsonp) {
-    let url = "https://njrzzk.com/app/a/app/tblInformation/getBaiduDescription";
-    this.http.get(url).subscribe(data => {
-      if (JSON.parse(data['_body']).access_token) {
-        this.storage.set('access_token', JSON.parse(data['_body']).access_token);
+  constructor(platform: Platform, 
+    statusBar: StatusBar, 
+    splashScreen: SplashScreen, 
+    private storage: Storage, 
+    public httpServiceProvider:HttpServiceProvider) {
+    //请求获得百度语音token
+    this.httpServiceProvider.httpGet('tblInformation/getBaiduDescription',(data)=>{
+      if (JSON.parse(data).access_token) {
+        this.storage.set('access_token', JSON.parse(data).access_token);
       }
     });
     //通过key，判断曾经是否进入过引导页
     this.storage.get('firstIn').then((result) => {
-      //result=false;
+      //result=false;//强制显示
       if (result) {
         this.rootPage = TabsPage;
       } else {

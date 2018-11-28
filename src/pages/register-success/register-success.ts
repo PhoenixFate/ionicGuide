@@ -26,7 +26,7 @@ export class RegisterSuccessPage {
   ionViewDidEnter(){
     const toast=this.toastCtrl.create({
       message:"恭喜你注册成功!",
-      duration:2000,
+      duration:1600,
       position:'middle'
     })
     toast.present();

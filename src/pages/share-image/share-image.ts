@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
-import { ShareMomentPage } from '../share-moment/share-moment';
 /**
  * Generated class for the ShareImagePage page.
  *

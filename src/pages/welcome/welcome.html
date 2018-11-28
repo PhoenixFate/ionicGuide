@@ -21,9 +21,9 @@
               <button ion-button color="primary" (click)='goHome()'>跳过</button>
             </ion-buttons>
           </ion-toolbar>
-          <img [src]="slide" class="slide-image"/>
-          <!-- <h2 class="slide-title" [innerHTML]="slide.title"></h2>
-          <p [innerHTML]="slide.description"></p> -->
+          <img [src]="configProvider.imgHead+slide" class="my-slide-image"/>
+          <h2 class="slide-title">欢迎来到云门山</h2>
+          <p>云门山是国家地质公园、国家重点风景名胜区、国家4A级旅游景区，云门山石窟及石刻为第七批全国重点文物保护单位。</p>
         </ion-slide>
         <ion-slide>
           <ion-toolbar>

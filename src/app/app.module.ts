@@ -1,3 +1,4 @@
+import { MessageDetailsPage } from './../pages/message-details/message-details';
 import { NgModule, ErrorHandler } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
@@ -46,6 +47,8 @@ import { HAMMER_GESTURE_CONFIG } from '@angular/platform-browser';
 import { HttpModule, JsonpModule } from '@angular/http'
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
+import { ConfigProvider } from '../providers/config/config';
+import { HttpServiceProvider } from '../providers/http-service/http-service';
 
 @NgModule({
   declarations: [
@@ -74,7 +77,8 @@ import { SplashScreen } from '@ionic-native/splash-screen';
     UsernamePage,
     ShareMomentPage,
     ShareImagePage,
-    ShareDetailPage
+    ShareDetailPage,
+    MessageDetailsPage
   ],
   imports: [
     BrowserModule,
@@ -116,7 +120,8 @@ import { SplashScreen } from '@ionic-native/splash-screen';
     UsernamePage,
     ShareMomentPage,
     ShareImagePage,
-    ShareDetailPage
+    ShareDetailPage,
+    MessageDetailsPage
   ],
   providers: [
     StatusBar,
@@ -128,7 +133,9 @@ import { SplashScreen } from '@ionic-native/splash-screen';
     FileTransfer,
     ImagePicker,
     { provide: ErrorHandler, useClass: IonicErrorHandler },
-    { provide: HAMMER_GESTURE_CONFIG, useClass: ionicGalleryModal.GalleryModalHammerConfig }
+    { provide: HAMMER_GESTURE_CONFIG, useClass: ionicGalleryModal.GalleryModalHammerConfig },
+    ConfigProvider,
+    HttpServiceProvider
   ]
 })
 export class AppModule { }

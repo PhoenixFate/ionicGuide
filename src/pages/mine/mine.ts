@@ -10,7 +10,6 @@ import { Storage } from '@ionic/storage';
 import { MessagePage } from '../message/message';
 
 import { ToastController } from 'ionic-angular';
-import { Http } from '@angular/http';
 import { ActionSheetController } from 'ionic-angular';
 import { Camera, CameraOptions } from '@ionic-native/camera';
 import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-native/file-transfer';
@@ -31,10 +30,13 @@ import { File } from '@ionic-native/file';
 export class MinePage {
   public user={username:'',phone:'',image:'',id:'',sex:'',nickname:''};
   public loginFlag=false;
-  constructor(public navCtrl: NavController, public navParams: NavParams,
-    public actionSheetCtrl: ActionSheetController, private storage: Storage, 
-    public http: Http, public toastCtrl: ToastController, 
-    private camera: Camera,private transfer:FileTransfer,
+  constructor(public navCtrl: NavController, 
+    public navParams: NavParams,
+    public actionSheetCtrl: ActionSheetController, 
+    private storage: Storage,  
+    public toastCtrl: ToastController, 
+    private camera: Camera,
+    private transfer:FileTransfer,
      private file:File) {
   }
 

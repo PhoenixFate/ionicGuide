@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
-import { Http } from "@angular/http";
+import { HttpServiceProvider } from '../../providers/http-service/http-service';
 /**
  * Generated class for the ScenicSpotPage page.
  *
@@ -14,41 +14,22 @@ import { Http } from "@angular/http";
   templateUrl: 'scenic-spot.html',
 })
 export class ScenicSpotPage {
-  public id;
   public desc;
-  public descRead;
   public audio=new Audio();
-  constructor(public navCtrl: NavController, public navParams: NavParams, public http:Http) {
-    this.id=navParams.get("id");
-    let url="https://njrzzk.com/app/a/app/tblScenicspot/getDetail?id="+navParams.get("id");
-    this.http.get(url).subscribe(data=>{
-      let temp=JSON.parse(data['_body']).rows;
+  constructor(public navCtrl: NavController, 
+    public navParams: NavParams, 
+    public httpServiceProvider:HttpServiceProvider,
+    ) {
+    let id=navParams.get("id");
+    //请求获得景点数据
+    this.httpServiceProvider.httpGet("tblScenicspot/getDetail?id="+id,(data)=>{
+      let temp=JSON.parse(data).rows;
       this.desc=temp[0].descriptionForApp;
-      console.log(this.desc);
-      this.descRead=temp[0].descriptionForRead;   
-      console.log(temp);
-    },err=>{
-
     });
   }
 
   ionViewDidLoad() {
-    console.log('ionViewDidLoad ScenicSpotPage');
+    //console.log('ionViewDidLoad ScenicSpotPage');
   }
 
-  doSpeak(){
-    if(this.audio!=null){
-      this.audio.pause();
-    }
-    let url='http://tsn.baidu.com/text2audio?lan=zh&ctp=1&cuid=abcdxxx&tok=24.c9db7b3df791be77a72b9fd8250486f3.2592000.1540103485.282335-11796257&tex='+this.descRead;
-    this.audio.src=url;
-    this.audio.play();
-
-  }
-
-  doPause(){
-    this.audio.pause();
-  }
-
-  
 }

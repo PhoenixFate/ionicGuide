@@ -7,9 +7,9 @@
 </ion-header>
 
 <ion-content>
-  <ion-slides pager id="my-slides" autoplay='2000'  loop *ngIf="slides.length > 1">
+  <ion-slides pager id="my-slides" autoplay='2000' loop *ngIf="slides.length > 1">
     <ion-slide *ngFor="let slide of slides ">
-      <img [src]="slide.mainImage" id="slide-image"/>
+      <img [src]="configProvider.imgHead+slide.mainImage" id="slide-image" />
     </ion-slide>
   </ion-slides>
 
@@ -17,23 +17,21 @@
   <ion-list>
     <ion-item *ngFor='let item of sceneries;let i=index' (click)="toDetails(i,item.id)">
       <div class='news-left'>
-        <img [src]="item.mainImage">
-      </div >
+        <img [src]="configProvider.imgHead+item.mainImage">
+      </div>
       <div class='news-right'>
         <div class='news-title'>
-           <b>{{item.title}}</b>
+          <b>{{item.title}}</b>
         </div>
         <div class='news-time'>
           <img src="assets/imgs/news-time.png" alt="">
           <div class='news-time-detail'>
-              {{item.updateDate}}
+            {{item.updateDate}}
           </div>
-            
         </div>
       </div>
-      <!-- <hr> -->
     </ion-item>
-    
+
   </ion-list>
 
   <ion-infinite-scroll (ionInfinite)='doInfinite($event)'>

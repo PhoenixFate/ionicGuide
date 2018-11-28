@@ -1,10 +1,10 @@
-import { Component,ViewChild } from '@angular/core';
-import { IonicPage, NavController, NavParams,Navbar, App } from 'ionic-angular';
+import { Component } from '@angular/core';
+import { IonicPage, NavController, NavParams,} from 'ionic-angular';
 import { NgForm } from "@angular/forms"
 import { RegisterPage } from '../register/register'
-import { Http } from '@angular/http';
 import { Storage } from '@ionic/storage';
 import { ToastController } from 'ionic-angular';
+import { HttpServiceProvider } from '../../providers/http-service/http-service';
 /**
  * Generated class for the LoginPage page.
  *
@@ -18,17 +18,18 @@ import { ToastController } from 'ionic-angular';
   templateUrl: 'login.html',
 })
 export class LoginPage {
-  //@ViewChild(Navbar) navBar: Navbar;
-
   public username='';
   public password='';
   public remember=false;
-  constructor(public navCtrl: NavController, public navParams: NavParams,public http: Http, private storage: Storage,public toastCtrl:ToastController,public app:App) {
+  constructor(public navCtrl: NavController, 
+    public navParams: NavParams,
+    private storage: Storage,
+    public toastCtrl:ToastController,
+    public httpServiceProvider:HttpServiceProvider) {
   }
 
   ionViewDidLoad() {
     //console.log('ionViewDidLoad LoginPage');
-    //this.navBar.backButtonClick = this.backButtonClick;
   }
 
   ionViewDidEnter(){
@@ -44,12 +45,11 @@ export class LoginPage {
   }
 
   onLogin(form:NgForm){
-    //console.log(form.value);
     let userTemp={username:form.value.username,password:form.value.password,remember:form.value.remember};
     this.storage.set('userTemp',userTemp);
-    let url = "https://njrzzk.com/app/a/app/tblRegistrar/login?username="+form.value.username+"&&password="+form.value.password;
-    this.http.get(url).subscribe(data => {
-      let temp=JSON.parse(data['_body']);
+    //请求获得用户数据
+    this.httpServiceProvider.httpGet("tblRegistrar/login?username="+form.value.username+"&&password="+form.value.password,(data)=>{
+      let temp=JSON.parse(data);
       if(temp.code!==0){
         const toast=this.toastCtrl.create({
           message:temp.msg,
@@ -62,13 +62,11 @@ export class LoginPage {
         this.navCtrl.popToRoot();
       }
     });
+    
   }
 
   toRegister(){
     this.navCtrl.push(RegisterPage);
   }
 
-  backButtonClick(){
-    this.app.getRootNav().push('tab4Root');
-  }
 }

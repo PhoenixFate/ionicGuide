@@ -48,4 +48,16 @@ page-mine {
         margin-top: 110px;
         
     }
+    .message-num {
+        position: absolute;
+        height: 12px;
+        padding: 0 3px;
+        min-width: 12px;
+        font-size: 10px;
+        line-height: 12px;
+        text-align: center;
+        background-color: red;
+        color: #fff;
+        border-radius: 6px;
+    }
 }

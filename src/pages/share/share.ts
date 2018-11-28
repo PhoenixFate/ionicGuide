@@ -13,6 +13,9 @@ import { ToastController } from 'ionic-angular';
 import { ImagePicker, ImagePickerOptions } from '@ionic-native/image-picker';
 import { ModalController } from 'ionic-angular';
 import { GalleryModal } from 'ionic-gallery-modal';
+
+import { HttpServiceProvider } from '../../providers/http-service/http-service';
+import { ConfigProvider } from '../../providers/config/config';
 /**
  * Generated class for the SharePage page.
  *
@@ -41,7 +44,9 @@ export class SharePage {
     private file: File,
     private imagePicker: ImagePicker,
     public http: Http,
-    private modalCtrl: ModalController
+    private modalCtrl: ModalController,
+    public httpServiceProvider: HttpServiceProvider,
+    public configProvider: ConfigProvider
   ) {
     this.requestShares('');
   }
@@ -65,9 +70,9 @@ export class SharePage {
 
   selectPhoto() {
     this.storage.get('publishMessage').then((value) => {
-      if(value!=null){
+      if (value != null) {
         this.navCtrl.push(ShareMomentPage, { getStorage: 1 });
-      }else {
+      } else {
         const actionSheet = this.actionSheetCtrl.create({
           buttons: [
             {
@@ -97,7 +102,7 @@ export class SharePage {
         actionSheet.present();
       }
     })
-   
+
   }
 
   share() {
@@ -114,7 +119,7 @@ export class SharePage {
     }
   }
 
-  doText(){
+  doText() {
     this.navCtrl.push(ShareMomentPage)
   }
 
@@ -141,7 +146,6 @@ export class SharePage {
       maximumImagesCount: 9,
       quality: 50
     }
-
     this.imagePicker.getPictures(options).then((results) => {
       this.navCtrl.push(ShareMomentPage, { results: results })
     }, (err) => {
@@ -170,48 +174,41 @@ export class SharePage {
         this.navCtrl.push(ShareMomentPage, { imgUrl: imgUrl });
       }
     }, (err) => {
-      alert(JSON.stringify(err));
-
     })
   }
 
   requestShares(infiniteScroll) {
-    let url = "https://njrzzk.com/app/a/app/tblPicTextShare/getPagelist?pageNum=" + this.page;
-    this.http.get(url).subscribe(data => {
-      if (data['_body']) {
-        let temp = JSON.parse(data['_body']).rows;
-        for (let i = 0; i < temp.length; i++) {
-          if (temp[i].images == [""]) {
-            temp[i].images = [];
-          } else {
-            let arr = temp[i].images.split('|');
-            for (let j = 0; j < arr.length; j++) {
-              arr[j] = 'https://njrzzk.com' + arr[j];
-            }
-            temp[i].images = arr;
+    //请求获得分享数据
+    this.httpServiceProvider.httpGet("tblPicTextShare/getPagelist?pageNum=" + this.page, (data) => {
+      let temp = JSON.parse(data).rows;
+      for (let i = 0; i < temp.length; i++) {
+        if (temp[i].images == [""]) {
+          temp[i].images = [];
+        } else {
+          let arr = temp[i].images.split('|');
+          for (let j = 0; j < arr.length; j++) {
+            arr[j] = 'https://njrzzk.com' + arr[j];
           }
-          let updateTime = temp[i].updateDate.split(' ');
-          temp[i].updateDate = updateTime[0];
-          if (temp[i].tblRegistrar.image != null) {
-            temp[i].tblRegistrar.image = 'https://njrzzk.com' + temp[i].tblRegistrar.image;
-          } else {
-            temp[i].tblRegistrar.image = "assets/imgs/avatar-default.png";
-          }
+          temp[i].images = arr;
         }
-        this.shares = this.shares.concat(temp);
-        this.page++;
-        if (infiniteScroll) {
-          infiniteScroll.complete();
-          if (JSON.parse(data['_body']).rows.length < 10) {
-            infiniteScroll.enable(false);
-          }
+        let updateTime = temp[i].updateDate.split(' ');
+        temp[i].updateDate = updateTime[0];
+        if (temp[i].tblRegistrar.image != null) {
+          temp[i].tblRegistrar.image = 'https://njrzzk.com' + temp[i].tblRegistrar.image;
+        } else {
+          temp[i].tblRegistrar.image = "assets/imgs/avatar-default.png";
         }
-
       }
-
-    }, err => {
-
-    })
+      this.shares = this.shares.concat(temp);
+      this.page++;
+      if (infiniteScroll) {
+        infiniteScroll.complete();
+        if (temp.length < 10) {
+          infiniteScroll.enable(false);
+        }
+      }
+    });
+    
   }
 
   doInfinite(infiniteScroll) {
@@ -219,44 +216,41 @@ export class SharePage {
   }
 
   toShareDetail(i) {
-    this.navCtrl.push(ShareDetailPage,{shareDetail:this.shares[i]});
+    this.navCtrl.push(ShareDetailPage, { shareDetail: this.shares[i] });
   }
 
   doRefresh(refresher) {
-    let url = "https://njrzzk.com/app/a/app/tblPicTextShare/getPagelist?pageNum=" + 1;
-    this.http.get(url).subscribe(data => {
-      if (data['_body']) {
-        let temp = JSON.parse(data['_body']).rows;
-        for (let i = 0; i < temp.length; i++) {
-          if (temp[i].images == [""]) {
-            temp[i].images = [];
-          } else {
-            let arr = temp[i].images.split('|');
-            for (let j = 0; j < arr.length; j++) {
-              arr[j] = 'https://njrzzk.com' + arr[j];
-            }
-            temp[i].images = arr;
+    //请求获得轮播图数据
+    this.httpServiceProvider.httpGet("tblPicTextShare/getPagelist?pageNum=" + 1, (data) => {
+      let temp = JSON.parse(data).rows;
+      for (let i = 0; i < temp.length; i++) {
+        if (temp[i].images == [""]) {
+          temp[i].images = [];
+        } else {
+          let arr = temp[i].images.split('|');
+          for (let j = 0; j < arr.length; j++) {
+            arr[j] = this.configProvider.imgHead + arr[j];
           }
-          let updateTime = temp[i].updateDate.split(' ');
-          temp[i].updateDate = updateTime[0];
-          if (temp[i].tblRegistrar.image != null) {
-            temp[i].tblRegistrar.image = 'https://njrzzk.com' + temp[i].tblRegistrar.image;
-          } else {
-            temp[i].tblRegistrar.image = "assets/imgs/avatar-default.png";
-          }
+          temp[i].images = arr;
         }
-        this.shares = temp;
-        if(refresher){
-          refresher.complete(); //当数据请求完成调用
+        let updateTime = temp[i].updateDate.split(' ');
+        temp[i].updateDate = updateTime[0];
+        if (temp[i].tblRegistrar.image != null) {
+          temp[i].tblRegistrar.image = this.configProvider.imgHead + temp[i].tblRegistrar.image;
+        } else {
+          temp[i].tblRegistrar.image = "assets/imgs/avatar-default.png";
         }
       }
-
-    }, err => {
-    })
+      this.shares = temp;
+      if (refresher) {
+        refresher.complete(); //当数据请求完成调用
+      }
+    });
+    
   }
 
   changeArrayToGallery(array) {
-    this.photos= [];
+    this.photos = [];
     for (let i = 0; i < array.length; i++) {
       var object = {
         "url": array[i]
@@ -266,8 +260,8 @@ export class SharePage {
   }
 
   //图片预览
-  openModal(i,j) {
-    this.imageArray=this.shares[i].images;
+  openModal(i, j) {
+    this.imageArray = this.shares[i].images;
     //图片数组转换成插件需要的数组 
     this.changeArrayToGallery(this.imageArray);
     // 显示图片预览 

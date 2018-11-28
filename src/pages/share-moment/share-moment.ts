@@ -10,9 +10,6 @@ import { File, FileEntry } from '@ionic-native/file';
 import { Storage } from '@ionic/storage';
 import { ToastController } from 'ionic-angular';
 import { ImagePicker, ImagePickerOptions } from '@ionic-native/image-picker';
-import { TranslationWidth } from '@angular/common';
-import { stringify } from '@angular/core/src/render3/util';
-
 
 import { Observable } from 'rxjs/Observable';
 import { ForkJoinObservable } from 'rxjs/observable/ForkJoinObservable';
@@ -48,7 +45,6 @@ export class ShareMomentPage {
     private transfer: FileTransfer,
     private file: File,
     private http: Http,
-    private jsonp: Jsonp,
     private imagePicker: ImagePicker
   ) {
     let imgUrl = navParams.get('imgUrl');
@@ -122,7 +118,6 @@ export class ShareMomentPage {
         {
           text: '拍照',
           handler: () => {
-            //this.imgs.push('assets/imgs/avatar-luke.png');
             this.doCamera();
           }
         },

@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
-import { Http, Jsonp} from '@angular/http';
+import { HttpServiceProvider } from '../../providers/http-service/http-service';
 /**
  * Generated class for the SceneryDatailsPage page.
  *
@@ -16,24 +16,21 @@ import { Http, Jsonp} from '@angular/http';
 export class SceneryDatailsPage {
   public index:any;
   public desc;
-  constructor(public navCtrl: NavController, public navParams: NavParams, public http:Http) {
+  constructor(public navCtrl: NavController, 
+    public navParams: NavParams, 
+    public httpServiceProvider:HttpServiceProvider,
+    ) {
     this.index=this.navParams.get("index");
     let id=this.navParams.get("id");
-    console.log(id);
-    let url="https://njrzzk.com/app/a/app/tblInformation/getDetail?id="+id;
-    this.http.get(url).subscribe(data=>{
-      let temp=JSON.parse(data['_body']).rows;
-      console.log(temp);
-      console.log("------------------")
+    //请求获得风景详情数据
+    this.httpServiceProvider.httpGet("tblInformation/getDetail?id="+id,(data)=>{
+      let temp=JSON.parse(data).rows;
       this.desc=temp[0].descriptionForApp;
-      console.log(this.desc);
-    },err=>{
-
     });
   }
 
   ionViewDidLoad() {
-    console.log('ionViewDidLoad SceneryDatailsPage');
+    //console.log('ionViewDidLoad SceneryDatailsPage');
   }
 
 }

@@ -34,13 +34,11 @@ export class HomePage {
   public isNavigate = false;
   public accessToken;
   constructor(public navCtrl: NavController, private platform: Platform, public http: Http, private storage: Storage, private statusBar: StatusBar) {
-    //沉浸式并且悬浮透明
-    //this.statusBar.overlaysWebView(true);
     this.storage.get('access_token').then((value) => {
       this.accessToken = value;
     })
     var that = this;
-    this.myInternal = setInterval(function () {
+    this.myInternal = setInterval(()=>{
       that.storage.get('speakDistance').then((value) => {
         if (value == null) {
           that.speakDistance = 30

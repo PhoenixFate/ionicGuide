@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { NgForm} from "@angular/forms"
-import { Http } from '@angular/http';
 import { RegisterSuccessPage } from '../register-success/register-success';
+import { HttpServiceProvider } from '../../providers/http-service/http-service';
 /**
  * Generated class for the RegisterPage page.
  *
@@ -21,7 +21,9 @@ export class RegisterPage {
   public password=''
   public checkPassword="";
   public usernameUsed=false;
-  constructor(public navCtrl: NavController, public navParams: NavParams,public http: Http) {
+  constructor(public navCtrl: NavController, 
+    public navParams: NavParams,
+    public httpServiceProvider:HttpServiceProvider) {
   }
 
   ionViewDidLoad() {
@@ -29,12 +31,9 @@ export class RegisterPage {
   }
 
   toRegister(form:NgForm){
-    let url = "https://njrzzk.com/app/a/app/tblRegistrar/register?username="+form.value.username+"&&password="+form.value.password +"&&nickname="+form.value.nickname;
-    this.http.get(url).subscribe(data => {
-      console.log(data);
-      console.log(data['_body']);
-      let temp=JSON.parse(data['_body']);
-      console.log(temp);
+    //注册用户
+    this.httpServiceProvider.httpGet("tblRegistrar/register?username="+form.value.username+"&&password="+form.value.password +"&&nickname="+form.value.nickname,(data)=>{
+      let temp=JSON.parse(data);
       if(temp.code==0){
         this.navCtrl.push(RegisterSuccessPage);
       }else {
@@ -48,10 +47,9 @@ export class RegisterPage {
       this.usernameUsed=false;
       return;
     }else {
-      let url = "https://njrzzk.com/app/a/app/tblRegistrar/checkUserNameAndPass?username="+this.username;
-      this.http.get(url).subscribe(data => {
-        let temp=JSON.parse(data['_body']);
-        console.log(temp);
+      //查询用户名是否可用
+      this.httpServiceProvider.httpGet("tblRegistrar/checkUserNameAndPass?username="+this.username,(data)=>{
+        let temp=JSON.parse(data);
         if(temp.code==0){
           this.usernameUsed=false;
         }else {
