@@ -4,12 +4,10 @@ import { NicknamePage } from '../nickname/nickname'
 import { PhoneNumberPage } from '../phone-number/phone-number';
 import { Storage } from '@ionic/storage';
 import { UsernamePage } from '../username/username';
-import { Http } from '@angular/http';
 import { ToastController } from 'ionic-angular';
 import { ActionSheetController } from 'ionic-angular';
-import { Camera, CameraOptions } from '@ionic-native/camera';
-import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-native/file-transfer';
-import { File } from '@ionic-native/file' ;
+import { UploadImageProvider } from '../../providers/upload-image/upload-image';
+import { HttpServiceProvider } from '../../providers/http-service/http-service';
 /**
  * Generated class for the ProfilePage page.
  *
@@ -25,7 +23,13 @@ import { File } from '@ionic-native/file' ;
 export class ProfilePage {
   public items = ["头像", "用户名", "昵称", "性别", "手机号"];
   public user = { username: '', phone: '', image: '', nickname: '', sex: '', id: '' };
-  constructor(public navCtrl: NavController, public navParams: NavParams, public actionSheetCtrl: ActionSheetController, private storage: Storage, public http: Http, public toastCtrl: ToastController, private camera: Camera,private transfer:FileTransfer, private file:File) {
+  constructor(public navCtrl: NavController,
+    public navParams: NavParams,
+    public actionSheetCtrl: ActionSheetController,
+    private storage: Storage,
+    public toastCtrl: ToastController,
+    public uploadImageProvider: UploadImageProvider,
+    public httpServiceProvider:HttpServiceProvider) {
 
   }
 
@@ -63,14 +67,14 @@ export class ProfilePage {
       buttons: [
         {
           text: '拍照',
-          handler:()=>{
-            this.doCamera();
+          handler: () => {
+            this.useCamera();
           }
         },
         {
           text: '从手机相册选择',
-          handler:()=>{
-            this.doLibrary();
+          handler: () => {
+            this.useLibrary();
           }
         },
         {
@@ -85,7 +89,6 @@ export class ProfilePage {
 
 
   changeSex() {
-    var that = this;
     const actionSheet = this.actionSheetCtrl.create({
       buttons: [
         {
@@ -110,7 +113,6 @@ export class ProfilePage {
   }
 
   exit() {
-    var that = this;
     const actionSheet = this.actionSheetCtrl.create({
       buttons: [
         {
@@ -148,14 +150,12 @@ export class ProfilePage {
     });
   }
 
-  doChangeSex(sex){
-    let id = this.user.id;
-    let url = "https://njrzzk.com/app/a/app/tblRegistrar/update?id=" + this.user.id + "&&sex=" + sex;
-    this.http.get(url).subscribe(data => {
-      let temp = JSON.parse(data['_body']);
+  doChangeSex(sex) {
+    this.httpServiceProvider.httpGet("tblRegistrar/update?id=" + this.user.id + "&&sex=" + sex,(data)=>{
+      let temp = JSON.parse(data);
       let msg;
       if (temp.code == 0) {
-        msg='修改成功';
+        msg = '修改成功';
         this.storage.set('user', temp.rows).then((result) => {
           this.storage.get('user').then((value) => {
             console.log(value);
@@ -165,7 +165,7 @@ export class ProfilePage {
           })
         });
       } else {
-        msg=temp.msg;
+        msg = temp.msg;
       }
       const toast = this.toastCtrl.create({
         message: msg,
@@ -173,72 +173,33 @@ export class ProfilePage {
         position: 'top'
       })
       toast.present();
-    });
-  }
-
-
-
-  doCamera(){
-    const options:CameraOptions={
-      quality:100,
-      destinationType:this.camera.DestinationType.FILE_URI,
-      encodingType:this.camera.EncodingType.JPEG,
-      mediaType:this.camera.MediaType.PICTURE,
-      allowEdit:true,
-      targetHeight:300,
-      targetWidth:300,
-    }
-    this.camera.getPicture(options).then((ImageData)=>{
-        this.doUpload(ImageData);
-    },(err)=>{
-
     })
   }
 
-  doLibrary(){
-    const options:CameraOptions={
-      quality:100,
-      destinationType:this.camera.DestinationType.FILE_URI,
-      encodingType:this.camera.EncodingType.JPEG,
-      mediaType:this.camera.MediaType.PICTURE,
-      sourceType:this.camera.PictureSourceType.PHOTOLIBRARY,
-      allowEdit:true,
-      targetHeight:300,
-      targetWidth:300,
-    }
-    this.camera.getPicture(options).then((ImageData)=>{
-        this.doUpload(ImageData);
-    },(err)=>{
-
-    })
-  }
-
-  doUpload(src) {
-    let timestamp=new Date().getTime();
-    const FileTransfer:FileTransferObject=this.transfer.create();
-    let options:FileUploadOptions= {
-      fileKey:'file',
-      fileName:timestamp+'.jpg',
-      mimeType:'image/jpeg',
-      httpMethod:"POST",
-      params:{
-        id:this.user.id
-      }
-    }
-    var api='https://njrzzk.com/app/a/app/tblRegistrar/imageUpload';
-    FileTransfer.upload(src,encodeURI(api),options).then((data)=>{
-      let temp = JSON.parse(data['response']);
-      this.storage.set('user', temp.rows).then((result) => {
+  useCamera() {
+    this.uploadImageProvider.doCamera(this.user.id,'tblRegistrar/imageUpload',(data) => {
+      //更新一下本地的user
+      this.storage.set('user', data.rows).then(() => {
         this.storage.get('user').then((value) => {
           if (value != null) {
             this.user = value;
           }
         })
       });
-    },(err)=>{
-      
     })
   }
 
+  useLibrary() {
+    this.uploadImageProvider.doLibraryOneImage(this.user.id,'tblRegistrar/imageUpload',(data) => {
+      //更新一下本地的user
+      this.storage.set('user', data.rows).then(() => {
+        this.storage.get('user').then((value) => {
+          if (value != null) {
+            this.user = value;
+          }
+        })
+      });
+    })
+  }
 
 }

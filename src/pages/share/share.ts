@@ -2,20 +2,14 @@ import { ShareDetailPage } from './../share-detail/share-detail';
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { ShareMomentPage } from '../share-moment/share-moment';
-
-import { Http } from '@angular/http';
 import { ActionSheetController } from 'ionic-angular';
-import { Camera, CameraOptions } from '@ionic-native/camera';
-import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-native/file-transfer';
-import { File } from '@ionic-native/file';
 import { Storage } from '@ionic/storage';
 import { ToastController } from 'ionic-angular';
-import { ImagePicker, ImagePickerOptions } from '@ionic-native/image-picker';
 import { ModalController } from 'ionic-angular';
 import { GalleryModal } from 'ionic-gallery-modal';
-
 import { HttpServiceProvider } from '../../providers/http-service/http-service';
 import { ConfigProvider } from '../../providers/config/config';
+import { UploadImageProvider } from '../../providers/upload-image/upload-image';
 /**
  * Generated class for the SharePage page.
  *
@@ -40,13 +34,10 @@ export class SharePage {
     public toastCtrl: ToastController,
     public actionSheetCtrl: ActionSheetController,
     private storage: Storage,
-    private camera: Camera, private transfer: FileTransfer,
-    private file: File,
-    private imagePicker: ImagePicker,
-    public http: Http,
     private modalCtrl: ModalController,
     public httpServiceProvider: HttpServiceProvider,
-    public configProvider: ConfigProvider
+    public configProvider: ConfigProvider,
+    public uploadImageProvider: UploadImageProvider
   ) {
     this.requestShares('');
   }
@@ -84,13 +75,13 @@ export class SharePage {
             {
               text: '拍照',
               handler: () => {
-                this.doCamera();
+                this.useCamera();
               }
             },
             {
               text: '从手机相册选择',
               handler: () => {
-                this.doLibrary();
+                this.useLibrary();
               }
             },
             {
@@ -123,59 +114,21 @@ export class SharePage {
     this.navCtrl.push(ShareMomentPage)
   }
 
-  doCamera() {
-    const options: CameraOptions = {
-      quality: 50,
-      destinationType: this.camera.DestinationType.FILE_URI,
-      encodingType: this.camera.EncodingType.JPEG,
-      mediaType: this.camera.MediaType.PICTURE,
-      sourceType: this.camera.PictureSourceType.CAMERA,
-      //allowEdit:true,
-      //targetHeight:300,
-      //targetWidth:300,
-    }
-    this.camera.getPicture(options).then((ImageData) => {
-      this.doUpload(ImageData);
-    }, (err) => {
-
-    })
-  }
-
-  doLibrary() {
-    const options: ImagePickerOptions = {
-      maximumImagesCount: 9,
-      quality: 50
-    }
-    this.imagePicker.getPictures(options).then((results) => {
-      this.navCtrl.push(ShareMomentPage, { results: results })
-    }, (err) => {
-
-    });
-  }
-
-  doUpload(src) {
-    let timestamp = new Date().getTime();
-    const FileTransfer: FileTransferObject = this.transfer.create();
-    let options: FileUploadOptions = {
-      fileKey: 'myfiles',
-      fileName: timestamp + '.jpg',
-      mimeType: 'image/jpeg',
-      httpMethod: "POST",
-      params: {
-        id: this.user.id
-      }
-    }
-    var api = 'https://njrzzk.com/app/a/app/tblPicTextShare/uploadFiles';
-    FileTransfer.upload(src, encodeURI(api), options).then((data) => {
-      let temp = JSON.parse(data['response']);
-      //alert(JSON.stringify(temp));
-      if (temp.code == 0) {
-        let imgUrl = temp.rows[0].src
+  useCamera() {
+    this.uploadImageProvider.doCamera2(this.user.id, 'tblPicTextShare/uploadFiles', (data) => {
+      if (data.code == 0) {
+        let imgUrl = data.rows[0].src
         this.navCtrl.push(ShareMomentPage, { imgUrl: imgUrl });
       }
-    }, (err) => {
     })
   }
+
+  useLibrary() {
+    this.uploadImageProvider.doLibraryManyImages2((data) => {
+      this.navCtrl.push(ShareMomentPage, { results: data });
+    })
+  }
+
 
   requestShares(infiniteScroll) {
     //请求获得分享数据
@@ -187,14 +140,14 @@ export class SharePage {
         } else {
           let arr = temp[i].images.split('|');
           for (let j = 0; j < arr.length; j++) {
-            arr[j] = 'https://njrzzk.com' + arr[j];
+            arr[j] = this.configProvider.imgHead + arr[j];
           }
           temp[i].images = arr;
         }
         let updateTime = temp[i].updateDate.split(' ');
         temp[i].updateDate = updateTime[0];
         if (temp[i].tblRegistrar.image != null) {
-          temp[i].tblRegistrar.image = 'https://njrzzk.com' + temp[i].tblRegistrar.image;
+          temp[i].tblRegistrar.image = this.configProvider.imgHead + temp[i].tblRegistrar.image;
         } else {
           temp[i].tblRegistrar.image = "assets/imgs/avatar-default.png";
         }

@@ -1,22 +1,13 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { ShareImagePage } from '../share-image/share-image';
-
-import { Http, Headers, Jsonp } from '@angular/http';
+import { Http, Headers } from '@angular/http';
 import { ActionSheetController } from 'ionic-angular';
-import { Camera, CameraOptions } from '@ionic-native/camera';
-import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-native/file-transfer';
-import { File, FileEntry } from '@ionic-native/file';
 import { Storage } from '@ionic/storage';
 import { ToastController } from 'ionic-angular';
-import { ImagePicker, ImagePickerOptions } from '@ionic-native/image-picker';
-
-import { Observable } from 'rxjs/Observable';
-import { ForkJoinObservable } from 'rxjs/observable/ForkJoinObservable';
-import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/catch';
-import 'rxjs/add/operator/toPromise';
 import $ from 'jquery';
+
+import { UploadImageProvider } from '../../providers/upload-image/upload-image';
 /**
  * Generated class for the ShareMomentPage page.
  *
@@ -41,26 +32,29 @@ export class ShareMomentPage {
     public toastCtrl: ToastController,
     public actionSheetCtrl: ActionSheetController,
     private storage: Storage,
-    private camera: Camera,
-    private transfer: FileTransfer,
-    private file: File,
     private http: Http,
-    private imagePicker: ImagePicker
-  ) {
+    public uploadImageProvider: UploadImageProvider) {
     let imgUrl = navParams.get('imgUrl');
     let results = navParams.get('results');
-    let getStorage=navParams.get('getStorage');
-    if(getStorage){
+    let getStorage = navParams.get('getStorage');
+    if (getStorage) {
       this.storage.get('publishMessage').then((value) => {
-        this.imgs=value.imgs;
-        this.textareaValue=value.textareaValue;
+        this.imgs = value.imgs;
+        this.textareaValue = value.textareaValue;
       })
     }
     if (imgUrl) {
       this.imgs.push(imgUrl);
     }
     if (results) {
-      this.doImagesUpload(results);
+      this.uploadImageProvider.doImagesUpload(results, this.user.id, (data) => {
+        if (data.code == 0) {
+          for (let i = 0; i < data.rows.length; i++) {
+            let imgUrl = data.rows[i].src;
+            this.imgs.push(imgUrl);
+          }
+        }
+      });
     }
   }
 
@@ -118,13 +112,13 @@ export class ShareMomentPage {
         {
           text: '拍照',
           handler: () => {
-            this.doCamera();
+            this.useCamera();
           }
         },
         {
           text: '从手机相册选择',
           handler: () => {
-            this.doLibrary();
+            this.useLibrary();
           }
         },
         {
@@ -136,59 +130,23 @@ export class ShareMomentPage {
     actionSheet.present();
   }
 
-  doCamera() {
-    const options: CameraOptions = {
-      quality: 60,
-      destinationType: this.camera.DestinationType.FILE_URI,
-      encodingType: this.camera.EncodingType.JPEG,
-      mediaType: this.camera.MediaType.PICTURE,
-      sourceType: this.camera.PictureSourceType.CAMERA,
-      //allowEdit:true,
-      //targetHeight:300,
-      //targetWidth:300,
-    }
-    this.camera.getPicture(options).then((ImageData) => {
-      this.doUpload(ImageData);
-    }, (err) => {
-
+  useCamera() {
+    this.uploadImageProvider.doCamera2(this.user.id, 'tblPicTextShare/uploadFiles', (data) => {
+      if (data.code == 0) {
+        let imgUrl = data.rows[0].src;
+        this.imgs.push(imgUrl);
+      }
     })
   }
 
-  doLibrary() {
-    const options: ImagePickerOptions = {
-      maximumImagesCount: 9 - (this.imgs.length),
-      quality: 60
-    }
-    this.imagePicker.getPictures(options).then((results) => {
-      for (let i = 0; i < results.length; i++) {
-        this.doUpload(results[i]);
+  useLibrary() {
+    this.uploadImageProvider.doLibraryManyImages(this.imgs.length, this.user.id, (data) => {
+      if (data.code == 0) {
+        for (let i = 0; i < data.rows.length; i++) {
+          let imgUrl = data.rows[i].src;
+          this.imgs.push(imgUrl);
+        }
       }
-    }, (err) => {
-
-    });
-  }
-
-  doUpload(src) {
-    let timestamp = new Date().getTime();
-    const FileTransfer: FileTransferObject = this.transfer.create();
-    let options: FileUploadOptions = {
-      fileKey: 'myfiles',
-      fileName: timestamp + '.jpg',
-      mimeType: 'image/jpeg',
-      httpMethod: "POST",
-      params: {
-        id: this.user.id
-      }
-    }
-    var api = 'https://njrzzk.com/app/a/app/tblPicTextShare/uploadFiles';
-    FileTransfer.upload(src, encodeURI(api), options).then((data) => {
-      let temp = JSON.parse(data['response']);
-      if (temp.code == 0) {
-        let imgUrl = temp.rows[0].src;
-        this.imgs.push(imgUrl);
-      }
-    }, (err) => {
-
     })
   }
 
@@ -211,88 +169,19 @@ export class ShareMomentPage {
   }
 
 
-  private ImagesUpload(filePaths: Array<string>): Observable<any> {
-    //每个文件上传任务创建一个信号
-    var observables: Array<any> = [];
-    filePaths.forEach((value: string, i, array) => {
-      if (!value.startsWith('file://')) {
-        value = 'file://' + value;
-      }
-      var observable = new Observable((sub: any) => {
-        this.file.resolveLocalFilesystemUrl(value).then(entry => {
-          (<FileEntry>entry).file(file => {
-            // this.readFile(<Blob>file);
-            let blob: Blob = <Blob>file;
-            const reader = new FileReader();
-            let timestamp = new Date().getTime();
-            reader.onloadend = () => {
-              const imgBlob = new Blob([reader.result], { type: blob.type });
-              this.formData.append('myfiles', imgBlob, timestamp + 'multy.jpg');
-              sub.next(null);
-              sub.complete();
-            };
-            reader.readAsArrayBuffer(blob);
-          });
-        })
-          .catch(error => console.log('报错了，日了狗----->' + JSON.stringify(error)));
-      });
-      observables.push(observable);
-    });
-    return ForkJoinObservable.create(observables);
-  }
-
-  doImagesUploadFile(host: string, params: Map<string, string>, filePaths: Array<string>, context: any, success: Function, fail: Function) {
-    this.formData = new FormData();
-    this.ImagesUpload(filePaths).subscribe(data => {
-      params.forEach((value, key) => {
-        this.formData.append(key, value);
-      });
-      this.http.post(host, this.formData).toPromise().then(res => {
-        success.call(context, res);
-      }).catch(error => {
-        fail.call(context, error);
-      });
-      // .catch(e => this.handleError(e))
-      // .map(response => response.text())
-      // // .finally(() => console.log('完成了'))
-      // .subscribe(ok => console.log('上传成功了'));
-    }, error => {
-      console.log('文件处理失败');
-    });
-  }
-
-  //入口
-  doImagesUpload(images) {
-    let host = 'https://njrzzk.com/app/a/app/tblPicTextShare/uploadImages';
-    let params = new Map();
-    params.set('id', this.user.id);
-    this.doImagesUploadFile(host, params, images, self, res => {
-      let temp = JSON.parse(res['_body']);
-      if (temp.code == 0) {
-        for (let i = 0; i < temp.rows.length; i++) {
-          let imgUrl = temp.rows[i].src;
-          this.imgs.push(imgUrl);
-        }
-      }
-    }, error => {
-      alert(JSON.stringify(error));
-    });
-  }
-
-
   doCancel() {
     this.storage.remove('publishMessage');
-    this.navCtrl.pop(); 
+    this.navCtrl.pop();
   }
 
   goBack() {
     $('#save-all').show();
   }
 
-  doSave(){
-    let publishMessage={'imgs':this.imgs,'textareaValue':this.textareaValue};
+  doSave() {
+    let publishMessage = { 'imgs': this.imgs, 'textareaValue': this.textareaValue };
     this.storage.set('publishMessage', publishMessage);
-    this.navCtrl.pop(); 
+    this.navCtrl.pop();
   }
 
 }

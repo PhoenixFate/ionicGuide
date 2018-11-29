@@ -1,3 +1,4 @@
+import { TrackPage } from './../pages/track/track';
 import { MessageDetailsPage } from './../pages/message-details/message-details';
 import { NgModule, ErrorHandler } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
@@ -49,6 +50,7 @@ import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { ConfigProvider } from '../providers/config/config';
 import { HttpServiceProvider } from '../providers/http-service/http-service';
+import { UploadImageProvider } from '../providers/upload-image/upload-image';
 
 @NgModule({
   declarations: [
@@ -78,7 +80,8 @@ import { HttpServiceProvider } from '../providers/http-service/http-service';
     ShareMomentPage,
     ShareImagePage,
     ShareDetailPage,
-    MessageDetailsPage
+    MessageDetailsPage,
+    TrackPage
   ],
   imports: [
     BrowserModule,
@@ -121,7 +124,8 @@ import { HttpServiceProvider } from '../providers/http-service/http-service';
     ShareMomentPage,
     ShareImagePage,
     ShareDetailPage,
-    MessageDetailsPage
+    MessageDetailsPage,
+    TrackPage
   ],
   providers: [
     StatusBar,
@@ -135,7 +139,8 @@ import { HttpServiceProvider } from '../providers/http-service/http-service';
     { provide: ErrorHandler, useClass: IonicErrorHandler },
     { provide: HAMMER_GESTURE_CONFIG, useClass: ionicGalleryModal.GalleryModalHammerConfig },
     ConfigProvider,
-    HttpServiceProvider
+    HttpServiceProvider,
+    UploadImageProvider
   ]
 })
 export class AppModule { }

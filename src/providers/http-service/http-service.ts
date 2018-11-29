@@ -18,7 +18,6 @@ export class HttpServiceProvider {
   httpGet(url,callback){
     let realUrl = this.configProvider.urlHead+url;
     this.http.get(realUrl).subscribe(data => {
-      let temp = JSON.parse(data['_body']).rows;
       callback(data['_body']);
     }, err => {
 

@@ -1,11 +1,9 @@
 import { Component, ViewChild, ElementRef } from '@angular/core';
-import { NavController, Platform, Thumbnail } from 'ionic-angular';
+import { NavController } from 'ionic-angular';
 import { ScenicSpotPage } from '../scenic-spot/scenic-spot';
-import { Http } from '@angular/http';
 import { Storage } from '@ionic/storage';
 import $ from 'jquery';
-import { StatusBar } from '@ionic-native/status-bar';
-
+import { HttpServiceProvider } from '../../providers/http-service/http-service';
 
 declare var BMap;
 declare var baidumap_location;
@@ -33,12 +31,14 @@ export class HomePage {
   public driving;
   public isNavigate = false;
   public accessToken;
-  constructor(public navCtrl: NavController, private platform: Platform, public http: Http, private storage: Storage, private statusBar: StatusBar) {
+  constructor(public navCtrl: NavController,
+    private storage: Storage,
+    public httpServiceProvider: HttpServiceProvider) {
     this.storage.get('access_token').then((value) => {
       this.accessToken = value;
     })
     var that = this;
-    this.myInternal = setInterval(()=>{
+    this.myInternal = setInterval(() => {
       that.storage.get('speakDistance').then((value) => {
         if (value == null) {
           that.speakDistance = 30
@@ -141,9 +141,8 @@ export class HomePage {
     this.driving = new BMap.DrivingRoute(map, { renderOptions: { map: map, panel: "navigation-result-map", autoViewport: true } });
     var that = this;
     var myIcon = new BMap.Icon("assets/imgs/red-marker.png", new BMap.Size(33, 35));
-    let url = "https://njrzzk.com/app/a/app/tblScenicspot/getlist";
-    this.http.get(url).subscribe(data => {
-      let temp = JSON.parse(data['_body']).rows;
+    this.httpServiceProvider.httpGet('tblScenicspot/getlist', (data) => {
+      let temp = JSON.parse(data).rows;
       this.storage.get('scenicSpotLength').then((result) => {
         if (result == null || result != temp.length) {
           this.storage.set('scenicSpotLength', temp.length);
@@ -192,10 +191,7 @@ export class HomePage {
         })();
       }
       this.scenicSpot = temp;
-    }, err => {
-
-    });
-
+    })
   }
 
   showInfo(thisMaker, point, i) {
@@ -211,7 +207,7 @@ export class HomePage {
     var infoWindow = new BMap.InfoWindow(sContent);  // 创建信息窗口对象
     thisMaker.openInfoWindow(infoWindow);   //图片加载完毕重绘infowindow
     //web点击事件为click，手机端点击事件为touchstart
-    let url = 'http://tsn.baidu.com/text2audio?lan=zh&ctp=1&cuid=abcdxxx&tok='+that.accessToken+'&tex=' + that.scenicSpot[i].descriptionForRead;
+    let url = 'http://tsn.baidu.com/text2audio?lan=zh&ctp=1&cuid=abcdxxx&tok=' + that.accessToken + '&tex=' + that.scenicSpot[i].descriptionForRead;
     infoWindow.addEventListener('open', function () {
       $('#more').bind("click", function () {
         that.navCtrl.push(ScenicSpotPage, { "id": point.id });
@@ -287,7 +283,6 @@ export class HomePage {
     };
     //解决baidumap_location.getCurrentPosition卡顿没有反应的情况
     //先跳转到前一次记录的当前位置，再获取位置，再次跳转一次；解决卡顿。
-    //start
     if (this.location.latitude != '116.404') {
       this.map.setZoom(15);
       var allOverlay = this.map.getOverlays();
@@ -308,7 +303,6 @@ export class HomePage {
       this.map.addOverlay(marker);
       this.map.panTo(point);
     }
-    //end
 
     var that = this;
     baidumap_location.getCurrentPosition((result) => {

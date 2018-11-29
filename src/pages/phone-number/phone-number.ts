@@ -2,8 +2,8 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { Storage } from '@ionic/storage';
 import { NgForm } from "@angular/forms";
-import { Http } from '@angular/http';
 import { ToastController } from 'ionic-angular';
+import { HttpServiceProvider } from '../../providers/http-service/http-service';
 /**
  * Generated class for the PhoneNumberPage page.
  *
@@ -19,7 +19,11 @@ import { ToastController } from 'ionic-angular';
 export class PhoneNumberPage {
   public phoneNumber;
   public user;
-  constructor(public navCtrl: NavController, public navParams: NavParams,private storage: Storage,public http: Http,public toastCtrl:ToastController) {
+  constructor(public navCtrl: NavController,
+    public navParams: NavParams,
+    private storage: Storage,
+    public toastCtrl: ToastController,
+    public httpServiceProvider: HttpServiceProvider) {
 
   }
 
@@ -36,37 +40,36 @@ export class PhoneNumberPage {
     })
   }
 
-  makeSure(form:NgForm) {
-    if(/^1[0-9]{10}$/.test(form.value.phoneNumber)){
-      let url = "https://njrzzk.com/app/a/app/tblRegistrar/update?id="+this.user.id+"&&phone="+form.value.phoneNumber;
-      this.http.get(url).subscribe(data => {
-        let temp=JSON.parse(data['_body']);
+  makeSure(form: NgForm) {
+    if (/^1[0-9]{10}$/.test(form.value.phoneNumber)) {
+      this.httpServiceProvider.httpGet("tblRegistrar/update?id=" + this.user.id + "&&phone=" + form.value.phoneNumber, (data) => {
+        let temp = JSON.parse(data);
         let msg;
-        if(temp.code==0){
-          msg='修改成功';
+        if (temp.code == 0) {
+          msg = '修改成功';
           this.storage.set('user', temp.rows);
-          setTimeout(()=>{
+          setTimeout(() => {
             this.navCtrl.pop();
-          },1100)
-        }else {
-          msg=temp.msg;
+          }, 1100)
+        } else {
+          msg = temp.msg;
         }
-        const toast=this.toastCtrl.create({
-          message:msg,
-          duration:1000,
-          position:'top'
+        const toast = this.toastCtrl.create({
+          message: msg,
+          duration: 1000,
+          position: 'top'
         })
         toast.present();
-      });
-    }else {
-      const toast=this.toastCtrl.create({
-        message:'请输入11位有效的手机号码 ',
-        duration:1600,
-        position:'top'
+      })
+    } else {
+      const toast = this.toastCtrl.create({
+        message: '请输入11位有效的手机号码 ',
+        duration: 1600,
+        position: 'top'
       })
       toast.present();
     }
-   
+
   }
 
 
