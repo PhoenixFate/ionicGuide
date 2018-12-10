@@ -34,6 +34,7 @@ page-mine {
         margin-top: 110px;
     }
     .head-icon{
+        color:#888;
         font-size: 30px;
         float:right;
         margin-top: 110px;
@@ -59,5 +60,12 @@ page-mine {
         background-color: red;
         color: #fff;
         border-radius: 6px;
+    }
+
+    .my-item-arraw {
+        position: relative;
+        top:4px;
+        font-size: 18px;
+        color:#aaa;
     }
 }

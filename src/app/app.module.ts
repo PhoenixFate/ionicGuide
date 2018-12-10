@@ -32,7 +32,7 @@ import { ShareMomentPage } from '../pages/share-moment/share-moment';
 import { ShareImagePage } from '../pages/share-image/share-image';
 import { ShareDetailPage } from './../pages/share-detail/share-detail';
 
-import { EmojiPickerModule } from '@ionic-tools/emoji-picker';
+//import { EmojiPickerModule } from '@ionic-tools/emoji-picker';
 
 
 import { QRScanner, QRScannerStatus } from '@ionic-native/qr-scanner';
@@ -88,7 +88,7 @@ import { UploadImageProvider } from '../providers/upload-image/upload-image';
     HttpModule,
     JsonpModule,
     ionicGalleryModal.GalleryModalModule,
-    EmojiPickerModule.forRoot(),
+    //EmojiPickerModule.forRoot(),
     IonicModule.forRoot(MyApp, {
       tabsHideOnSubPages: 'true',
       backButtonText: '返回'

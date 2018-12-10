@@ -119,6 +119,7 @@ export class HomePage {
   }
 
   baiduMapInitial() {
+    console.log(this.map_container);
     //创建百度Map实例
     let map = this.map = new BMap.Map(this.map_container.nativeElement, { enableClick: true });
     //添加控件

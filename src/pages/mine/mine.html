@@ -18,14 +18,14 @@
       <img [src]='user.image?("https://njrzzk.com"+user.image):"assets/imgs/avatar-default.png"' alt=""  class='myAvatar' (click)='changeAvatar()'>
       <span class='myNickname' [hidden]='!loginFlag'>{{user.nickname}}</span>
       <button (click)='toLogin()' class='my-login' ion-button [hidden]='loginFlag'>登入</button>
-      <ion-icon name='arrow-forward' class='head-icon' (click)='toDetails(1)'></ion-icon>
+      <ion-icon name='ios-arrow-forward' class='head-icon' (click)='toDetails(1)' ></ion-icon>
   </div>
   <div>
     <ion-list>
       <ion-item *ngFor="let item of items; let i=index" (click)='toDetails(i)'>
         <ion-icon [name]='item.icon' item-start></ion-icon>
         {{item.name}}<span *ngIf='i==4' class='message-num' [hidden]='messageFlag'>{{messageNumber}}</span>
-        <ion-icon name='arrow-forward' item-end></ion-icon>
+        <ion-icon name='ios-arrow-forward' item-end class='my-item-arraw'></ion-icon>
       </ion-item>
     </ion-list>
   </div>

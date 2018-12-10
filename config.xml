@@ -97,4 +97,5 @@
         <variable name="IOS_LOCATION_DESC" value="请点击'好'以允许访问。" />
     </plugin>
     <engine name="android" spec="7.1.1" />
+    <engine name="ios" spec="~4.5.5" />
 </widget>

@@ -3,5 +3,42 @@ page-login {
         font-size: 12px;
         color: #aaa;
     }
+
+    .third-party {
+        border-top: 1px solid #ccc;
+        position: fixed;
+        height: 100px;
+        bottom: 0;
+        left:0;
+        width: 100%;
+    }
+
+    .third-party-title {
+        width: 100px;
+        color:#777;
+        left:50%;
+        margin-left:-50px;
+        position: absolute;
+        top:-10px;
+        text-align: center;
+        background-color: #fff;
+    }
+
+    .wechat {
+        text-align: center;
+        margin: 20px auto 0;
+        width: 100px;
+        height: 100%;
+    }
+
+    .wechat img {
+        height: 50px;
+        width: 50px;;
+    }
+
+    .wechat p {
+        margin: 0;
+        color: #aaa;
+    }
    
 }

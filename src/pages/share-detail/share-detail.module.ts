@@ -1,14 +1,14 @@
 import { NgModule } from '@angular/core';
 import { IonicPageModule } from 'ionic-angular';
 import { ShareDetailPage } from './share-detail';
-import { EmojiPickerModule } from '@ionic-tools/emoji-picker';
+//import { EmojiPickerModule } from '@ionic-tools/emoji-picker';
 
 @NgModule({
   declarations: [
     ShareDetailPage,
   ],
   imports: [
-    EmojiPickerModule.forRoot(),
+    //EmojiPickerModule.forRoot(),
     IonicPageModule.forChild(ShareDetailPage),
   ],
 })
