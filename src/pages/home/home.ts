@@ -201,10 +201,17 @@ export class HomePage {
 
     var that = this;
     var sContent = '<div class="infoWindow-content">'
-      + '<div class="infoWindow-left"><h6 id="more" class="infoWindow-name">' + point.name + '</h6><h6>' + point.distance + ' 米</h6></div>'
-      + '<div class="infoWindow-right" ><div class="infoWindow-alarm"  id="speak"><img src="assets/imgs/alarm2.png" class="infoWindow-alarm-image"/></div></div>'
-      + '<div class="infoWindow-right2" ><div class="infoWindow-route"  id="route"><img src="assets/imgs/route.png"/></div></div>'
-      + '</div>';
+      + '<div class="infoWindow-left">'
+            +'<img src="assets/imgs/infoWindow-head.jpg" class="left-image">'
+            +'<div class="infoWindow-alarm"  id="speak">'
+              +'<img src="assets/imgs/shengyin.png" class="infoWindow-alarm-image"/>'
+            +'</div>'
+      +'</div>'
+      +'<div class="infoWindow-right">'
+            +'<h6 id="more" class="infoWindow-name">' + point.name + '</h6><h6>' + point.distance + ' 米</h6></div>'
+      +'<div class="infoWindow-go" id="route">到这去</div>'
+      +'</div>';
+
     var infoWindow = new BMap.InfoWindow(sContent);  // 创建信息窗口对象
     thisMaker.openInfoWindow(infoWindow);   //图片加载完毕重绘infowindow
     //web点击事件为click，手机端点击事件为touchstart

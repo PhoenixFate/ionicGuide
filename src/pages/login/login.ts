@@ -69,4 +69,13 @@ export class LoginPage {
     this.navCtrl.push(RegisterPage);
   }
 
+  wechatLogin(){
+    const toast=this.toastCtrl.create({
+      message:'敬请期待',
+      duration:1300,
+      position:'top'
+    })
+    toast.present();
+  }
+
 }
